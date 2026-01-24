@@ -43,7 +43,6 @@
 Mobile first เเต่ต้อง responsive
 ทำให้ UI สวยงามเเละเข้าถึงง่าย ใช้สีเขียวกลางๆ เป็น primary color ใช้สีขาวเป็น background color
 พยายามใช้ shadcn ui ให้เยอะที่สุด เเละใช้ flex ยกเว้นบาง component ที่ต้องใช้ absolute เช่น FoodCard ตอนปัด
-Icon ใช้ lucide-react
 
 - FoodCard
   - เเสดงรูปภาพ
