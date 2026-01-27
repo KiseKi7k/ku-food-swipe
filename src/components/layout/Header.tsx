@@ -3,8 +3,20 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Utensils } from "lucide-react";
+import { googleSignIn, signOut, useSession } from "@/lib/authClient";
+import Image from "next/image";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 export function Header() {
+  const { data } = useSession();
+  const { session, user } = data || {};
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-md">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
@@ -17,15 +29,46 @@ export function Header() {
           </span>
         </Link>
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" className="hidden sm:inline-flex">
-            Login
-          </Button>
-          <Button
-            size="sm"
-            className="bg-green-600 hover:bg-green-700 shadow-md shadow-green-100"
-          >
-            Register
-          </Button>
+          {session ? (
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-slate-900">
+                {user?.name}
+              </span>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <div className="relative">
+                    <Image
+                      src={user?.image || "/avatar.png"}
+                      alt={user?.name || "User"}
+                      width={40}
+                      height={40}
+                      className="rounded-full"
+                    />
+                  </div>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem
+                      onClick={async () => {
+                        await signOut();
+                      }}
+                      className="text-red-500 focus:text-red-600"
+                    >
+                      Signout
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          ) : (
+            <Button
+              size="sm"
+              onClick={googleSignIn}
+              className="bg-green-600 hover:bg-green-700 shadow-md shadow-green-100"
+            >
+              Login
+            </Button>
+          )}
         </div>
       </div>
     </header>
