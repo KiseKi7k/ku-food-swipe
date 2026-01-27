@@ -28,6 +28,11 @@ export default function SwipePage() {
   const [history, setHistory] = useState<History[]>([]);
   const [isFinished, setIsFinished] = useState(false);
 
+  // TODO: Check if user play session exist
+  // If not then return to /
+  // If there is a session then load history
+  // Also add loading state for that
+
   const handleSwipe = (direction: "left" | "right" | "up") => {
     const currentFood = foods[currentIndex];
     let status: SwipeStatus = "dislike";
@@ -40,8 +45,17 @@ export default function SwipePage() {
 
     if (direction === "up" || currentIndex >= foods.length - 1) {
       setIsFinished(true);
+      // TODO: Fetch end
     } else {
       setCurrentIndex((prev) => prev + 1);
+
+      const foodBuffer = 5;
+      if (currentIndex >= foods.length - foodBuffer) {
+        const dislikeId = history
+          .filter((h) => h.status === "dislike")
+          .map((h) => h.id);
+        // TODO:Fetch foods
+      }
     }
   };
 
