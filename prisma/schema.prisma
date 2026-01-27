@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Users {
+  id        String      @id @default(uuid())
+  email     String
+  username  String
+  role      String
+  userPlays UserPlays[]
+}
+
+model UserPlays {
+  id      String    @id @default(uuid())
+  userId  String    @map("user_id")
+  status  String
+  records Records[]
+  users   Users     @relation(fields: [userId], references: [id])
+}
+
+model Records {
+  id         String    @id @default(uuid())
+  userPlayId String    @map("user_play_id")
+  status     String
+  itemId     String
+  userPlays  UserPlays @relation(fields: [userPlayId], references: [id])
+}
+
+model Foods {
+  id    String  @id @default(uuid())
+  image Bytes?
+  Name String
+  Items Items[]
+  tags  Tags[]  @relation("FoodsToTags")
+}
+
+model Tags {
+  id    Int     @id @default(autoincrement())
+  Name  String
+  Foods Foods[] @relation("FoodsToTags")
+}
+
+model Items {
+  id       String @id @default(uuid())
+  foodId   String @map("food_id")
+  priceMin Int
+  priceMax Int?
+  foods    Foods  @relation(fields: [foodId], references: [id])
+}
+
+model Shop {
+  id         String   @id @default(uuid())
+  Name       String
+  locationId String   @map("location_id")
+  location   Location @relation(fields: [locationId], references: [id])
+}
+
+model Location {
+  id   String @id @default(uuid())
+  Name String
+  Shop Shop[]
+}
