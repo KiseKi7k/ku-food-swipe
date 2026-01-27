@@ -15,12 +15,17 @@ import {
   X,
 } from "lucide-react";
 import Link from "next/link";
-import { SwipeHistory, SwipeStatus } from "@/types/food";
+import { SwipeStatus } from "@/types/food";
+
+type History = {
+  id: string;
+  status: SwipeStatus;
+};
 
 export default function SwipePage() {
   const [foods, setFoods] = useState(mockFoods);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [history, setHistory] = useState<SwipeHistory[]>([]);
+  const [history, setHistory] = useState<History[]>([]);
   const [isFinished, setIsFinished] = useState(false);
 
   const handleSwipe = (direction: "left" | "right" | "up") => {
@@ -30,10 +35,7 @@ export default function SwipePage() {
     if (direction === "right") status = "like";
     if (direction === "up") status = "eat";
 
-    const newHistory = [
-      ...history,
-      { id: currentFood.id, name: currentFood.name, status },
-    ];
+    const newHistory = [...history, { id: currentFood.id, status }];
     setHistory(newHistory);
 
     if (direction === "up" || currentIndex >= foods.length - 1) {
@@ -44,8 +46,7 @@ export default function SwipePage() {
   };
 
   if (isFinished) {
-    const finalChoice =
-      history.find((h) => h.status === "eat") || history[history.length - 1];
+    const finalChoice = foods[currentIndex];
 
     return (
       <div className="container mx-auto px-4 py-12 flex flex-col items-center max-w-lg">
@@ -138,27 +139,9 @@ export default function SwipePage() {
         </AnimatePresence>
 
         {/* Manual buttons for accessibility as per requirement */}
-        <div className="absolute -bottom-20 left-0 right-0 flex justify-center gap-6 pointer-events-auto">
-          <button
-            onClick={() => handleSwipe("left")}
-            className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-red-500 shadow-lg transition-transform hover:scale-110 active:scale-95 border border-slate-100"
-          >
-            <X className="h-8 w-8" />
-          </button>
-          <button
-            onClick={() => handleSwipe("up")}
-            className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-blue-500 shadow-lg transition-transform hover:scale-110 active:scale-95 border border-slate-100"
-          >
-            <UtensilsCrossed className="h-6 w-6" />
-          </button>
-          <button
-            onClick={() => handleSwipe("right")}
-            className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-green-500 shadow-lg transition-transform hover:scale-110 active:scale-95 border border-slate-100"
-          >
-            <Heart className="h-8 w-8" />
-          </button>
-        </div>
+        <SwipeButtons handleSwipe={handleSwipe} />
 
+        {/* No foods left*/}
         {currentIndex >= foods.length && (
           <div className="absolute inset-0 flex items-center justify-center text-center p-8 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
             <div className="space-y-4">
@@ -173,3 +156,32 @@ export default function SwipePage() {
     </div>
   );
 }
+
+const SwipeButtons = ({
+  handleSwipe,
+}: {
+  handleSwipe: (direction: "left" | "right" | "up") => void;
+}) => {
+  return (
+    <div className="absolute -bottom-20 left-0 right-0 flex justify-center gap-6 pointer-events-auto">
+      <button
+        onClick={() => handleSwipe("left")}
+        className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-red-500 shadow-lg transition-transform hover:scale-110 active:scale-95 border border-slate-100"
+      >
+        <X className="h-8 w-8" />
+      </button>
+      <button
+        onClick={() => handleSwipe("up")}
+        className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-blue-500 shadow-lg transition-transform hover:scale-110 active:scale-95 border border-slate-100"
+      >
+        <UtensilsCrossed className="h-6 w-6" />
+      </button>
+      <button
+        onClick={() => handleSwipe("right")}
+        className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-green-500 shadow-lg transition-transform hover:scale-110 active:scale-95 border border-slate-100"
+      >
+        <Heart className="h-8 w-8" />
+      </button>
+    </div>
+  );
+};

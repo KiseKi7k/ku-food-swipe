@@ -7,11 +7,18 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import { useState } from "react";
 
 export default function Home() {
+  // TODO: Check if user play session exist if then go to /swipe
+
   const [filters, setFilters] = useState({
     tags: [] as string[],
     shops: [] as string[],
     priceRange: [0, 500] as [number, number],
   });
+
+  const handleStart = () => {
+    // TODO: Create play session
+    // TODO: Redirect to /swipe
+  };
 
   return (
     <div className="container mx-auto px-4 py-8 md:py-16 flex flex-col items-center">
@@ -35,6 +42,7 @@ export default function Home() {
             <Button
               size="lg"
               className="h-14 px-8 text-lg bg-green-600 hover:bg-green-700 gap-2 rounded-2xl shadow-xl shadow-green-100 transition-all hover:scale-105 active:scale-95"
+              onClick={handleStart}
             >
               เริ่มปัดเลย <ArrowRight className="h-5 w-5" />
             </Button>
