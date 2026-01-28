@@ -33,7 +33,7 @@ model Records {
 model Foods {
   id    String  @id @default(uuid())
   image Bytes?
-  Name String
+  foodName String
   Items Items[]
   tags  Tags[]  @relation("FoodsToTags")
 }
@@ -49,6 +49,8 @@ model Items {
   foodId   String @map("food_id")
   priceMin Int
   priceMax Int?
+  shopId  String? @map("shop_id")
+  Shop   Shop?  @relation(fields: [shopId], references: [id])
   foods    Foods  @relation(fields: [foodId], references: [id])
 }
 
@@ -57,6 +59,8 @@ model Shop {
   Name       String
   locationId String   @map("location_id")
   location   Location @relation(fields: [locationId], references: [id])
+  Items Items[]
+
 }
 
 model Location {
