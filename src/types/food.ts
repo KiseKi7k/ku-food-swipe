@@ -6,6 +6,7 @@ export type Food = {
   image: string;
   tags: string[];
   shop: string;
+  location: string;
 };
 
 export type SwipeStatus = "like" | "dislike" | "eat";
@@ -41,29 +42,25 @@ export type FoodItem = {
 export type RawFoodItem = {
   food: {
     image: string | null;
+    name: string;
     tags: {
-      id: number;
-      createdAt: Date;
-      updatedAt: Date;
       name: string;
     }[];
     id: string;
     createdAt: Date;
     updatedAt: Date;
-    name: string;
   };
   shop: {
-    id: string;
-    createdAt: Date;
-    updatedAt: Date;
     name: string;
-    locationId: string;
-  };
+    location: {
+      name: string;
+    };
+  } | null;
   id: string;
   foodId: string;
   priceMin: number;
-  priceMax: number;
-  shopId: string;
+  priceMax: number | null;
+  shopId: string | null;
   createdAt: Date;
   updatedAt: Date;
 };

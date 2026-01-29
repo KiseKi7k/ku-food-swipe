@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 const shuffleArray = <T>(array: T[]): T[] => {
   const shuffled = [...array]; // Create a copy so you don't mutate the original

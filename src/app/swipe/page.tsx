@@ -41,18 +41,21 @@ export default function SwipePage() {
 
         const { data } = await response.json();
 
-        const formatted: Food[] = (data as RawFoodItem[]).map((item) => ({
+        const foods: Food[] = (data as RawFoodItem[]).map((item) => ({
           id: item.id,
           name: item.food.name || "Unknown",
+          tags: item.food.tags?.map((t) => t.name) || [],
+
           priceMin: item.priceMin || 0,
           priceMax: item.priceMax || 0,
-          shop: item.shop.name || "Unknown Shop",
-          image: item.food.image ? item.food.image : "/placeholder.jpg",
-          tags: item.food.tags?.map((t) => t.name) || [],
-        }));
-        console.log("Formatted items:", formatted);
 
-        setFoods(formatted);
+          shop: item.shop?.name || "Unknown Shop",
+          location: item.shop?.location.name || "Unknown Location",
+          image: item.food.image ? item.food.image : "/placeholder.jpg",
+        }));
+        console.log("Foods:", foods);
+
+        setFoods(foods);
         // console.log("Fetched items:", data.data[0].Shop.Name);
       } catch (err) {
         setError("error fetching shops");
