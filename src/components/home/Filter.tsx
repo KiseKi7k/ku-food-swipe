@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { X } from "lucide-react";
+import type { Location, Tag } from "@/types/other";
 
 const TAG_OPTIONS = [
   "ข้าว",
@@ -45,6 +46,25 @@ export function Filter({ onFilterChange }: FilterProps) {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [selectedShops, setSelectedShops] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 500]);
+
+  const [tags, setTags] = useState<Tag[]>([]);
+  const [locations, setLocations] = useState<Location[]>([]);
+
+  // Display tags and location on start (may cache this)
+  useEffect(() => {
+    const fetchTags = async () => {
+      const response = await fetch("/api/tag");
+      const data = await response.json();
+      setTags(data.data);
+    };
+    const fetchLocations = async () => {
+      const response = await fetch("/api/location");
+      const data = await response.json();
+      setLocations(data.data);
+    };
+    fetchLocations();
+    fetchTags();
+  }, []);
 
   const toggleTag = (tag: string) => {
     setSelectedTags((prev) =>
@@ -95,19 +115,19 @@ export function Filter({ onFilterChange }: FilterProps) {
         <div className="space-y-3">
           <Label className="text-sm font-medium text-slate-600">หมวดหมู่</Label>
           <div className="flex flex-wrap gap-2">
-            {TAG_OPTIONS.map((tag) => (
+            {tags.map((tag) => (
               <Badge
-                key={tag}
-                variant={selectedTags.includes(tag) ? "default" : "outline"}
+                key={tag.id}
+                variant={selectedTags.includes(tag.id) ? "default" : "outline"}
                 className={`cursor-pointer px-3 py-1 text-sm font-normal transition-all ${
-                  selectedTags.includes(tag)
+                  selectedTags.includes(tag.id)
                     ? "bg-green-600 hover:bg-green-700 text-white border-transparent"
                     : "bg-white hover:border-green-300 text-slate-600"
                 }`}
-                onClick={() => toggleTag(tag)}
+                onClick={() => toggleTag(tag.id)}
               >
-                {tag}
-                {selectedTags.includes(tag) && (
+                {tag.name}
+                {selectedTags.includes(tag.id) && (
                   <X className="ml-1 h-3 w-3 inline-block" />
                 )}
               </Badge>
@@ -115,22 +135,24 @@ export function Filter({ onFilterChange }: FilterProps) {
           </div>
         </div>
 
-        {/* Shops */}
+        {/* Locations */}
         <div className="space-y-3">
           <Label className="text-sm font-medium text-slate-600">ร้านค้า</Label>
           <div className="flex flex-wrap gap-2">
-            {SHOPS.map((shop) => (
+            {locations.map((location) => (
               <Badge
-                key={shop}
-                variant={selectedShops.includes(shop) ? "default" : "outline"}
+                key={location.id}
+                variant={
+                  selectedShops.includes(location.id) ? "default" : "outline"
+                }
                 className={`cursor-pointer px-3 py-1 text-sm font-normal transition-all ${
-                  selectedShops.includes(shop)
+                  selectedShops.includes(location.id)
                     ? "bg-green-600 hover:bg-green-700 text-white border-transparent"
                     : "bg-white hover:border-green-300 text-slate-600"
                 }`}
-                onClick={() => toggleShop(shop)}
+                onClick={() => toggleShop(location.id)}
               >
-                {shop}
+                {location.name}
               </Badge>
             ))}
           </div>

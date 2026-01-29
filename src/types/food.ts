@@ -17,26 +17,10 @@ export type SwipeHistory = {
   status: SwipeStatus;
 };
 
-export type Tag = {
-  [x: string]: any;
-  id: number;
-  name: string;
-};
-
 export type Shop = {
   id: string;
   name: string;
   locationId: string;
-};
-
-export type FoodItem = {
-  id: string;
-  foodId: string;
-  priceMin: number;
-  priceMax: number | null;
-  shopId: string;
-  foods: Food;
-  Shop: Shop;
 };
 
 export type RawFoodItem = {

@@ -75,7 +75,7 @@ export async function GET(req: NextRequest) {
   } catch (error: any) {
     console.error("Prisma Error:", error);
     return NextResponse.json(
-      { status: "error", message: error.message },
+      { status: "error", data: [], message: error.message },
       { status: 500 },
     );
   }
