@@ -432,20 +432,20 @@ export default function AdminPage() {
                           <div className="flex items-center gap-3">
                             <div className="h-10 w-10 rounded-lg overflow-hidden bg-slate-100">
                               <img
-                                src={food.foods?.image || ""}
+                                src={food.food?.image || ""}
                                 alt=""
                                 className="h-full w-full object-cover"
                               />
                             </div>
                             <span className="font-medium text-slate-800">
-                              {food.foods?.foodName}
+                              {food.food?.foodName}
                             </span>
                           </div>
                         </td>
                         <td className="px-6 py-4 text-slate-600">
                           <div className="flex items-center gap-2">
                             <StoreIcon className="h-4 w-4" />
-                            {food.Shop?.Name ? food.Shop?.Name : "ไม่มีร้านค้า"}
+                            {food.shop?.name ? food.shop?.name : "ไม่มีร้านค้า"}
 
                           </div>
                         </td>
@@ -454,13 +454,13 @@ export default function AdminPage() {
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex flex-wrap gap-1">
-                            {food.foods?.tags?.map((tag) => (
+                            {food.food?.tags?.map((tag) => (
                               <Badge
                                 key={tag.id}
                                 variant="secondary"
                                 className="px-2 py-0 text-[10px] font-normal"
                               >
-                                {tag.Name}
+                                {tag.name}
                               </Badge>
                             ))}
                           </div>
