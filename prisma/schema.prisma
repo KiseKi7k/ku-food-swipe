@@ -1,50 +1,123 @@
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "../src/generated"
 }
 
 datasource db {
   provider = "postgresql"
 }
 
-model Users {
-  id        String      @id @default(uuid())
-  email     String
-  username  String
-  role      String
-  userPlays UserPlays[]
+model User {
+  id            String    @id
+  name          String
+  email         String
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+
+  userPlays UserPlay[]
+  role      String     @default("user")
+
+  @@unique([email])
+  @@map("user")
 }
 
-model UserPlays {
-  id      String    @id @default(uuid())
-  userId  String    @map("user_id")
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+// Food Swipe
+
+model UserPlay {
+  id      String   @id @default(uuid())
+  userId  String   @map("user_id")
   status  String
-  records Records[]
-  users   Users     @relation(fields: [userId], references: [id])
+  records Record[]
+  users   User     @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-model Records {
-  id         String    @id @default(uuid())
-  userPlayId String    @map("user_play_id")
+model Record {
+  id         String   @id @default(uuid())
+  userPlayId String   @map("user_play_id")
   status     String
   itemId     String
-  userPlays  UserPlays @relation(fields: [userPlayId], references: [id])
+  userPlays  UserPlay @relation(fields: [userPlayId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-model Foods {
-  id    String  @id @default(uuid())
+model Food {
+  id    String @id @default(uuid())
   image Bytes?
-  foodName String
-  Items Items[]
-  tags  Tags[]  @relation("FoodsToTags")
-}
-
-model Tags {
-  id    Int     @id @default(autoincrement())
   Name  String
-  Foods Foods[] @relation("FoodsToTags")
+  Items Item[]
+  tags  Tag[]  @relation("FoodsToTags")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-model Items {
+model Tag {
+  id    Int    @id @default(autoincrement())
+  Name  String
+  Foods Food[] @relation("FoodsToTags")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Item {
   id       String @id @default(uuid())
   foodId   String @map("food_id")
   priceMin Int
@@ -52,6 +125,9 @@ model Items {
   shopId  String? @map("shop_id")
   Shop   Shop?  @relation(fields: [shopId], references: [id])
   foods    Foods  @relation(fields: [foodId], references: [id])
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Shop {
@@ -60,11 +136,16 @@ model Shop {
   locationId String   @map("location_id")
   location   Location @relation(fields: [locationId], references: [id])
   Items Items[]
-
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Location {
   id   String @id @default(uuid())
   Name String
   Shop Shop[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

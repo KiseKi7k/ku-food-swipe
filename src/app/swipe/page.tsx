@@ -18,13 +18,17 @@ import Link from "next/link";
 import { Food, SwipeHistory, SwipeStatus } from "@/types/food";
 import { FoodItem } from "../type/food";
 import { it } from "node:test";
+type History = {
+  id: string;
+  status: SwipeStatus;
+};
 
 export default function SwipePage() {
 
 
   // const [foods, setFoods] = useState(mockFoods);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [history, setHistory] = useState<SwipeHistory[]>([]);
+  const [history, setHistory] = useState<History[]>([]);
   const [isFinished, setIsFinished] = useState(false);
   // const [items, setItems] = useState<FoodItem[]>([]);
   const [foods, setFoods] = useState<Food[]>([]);
@@ -67,7 +71,12 @@ export default function SwipePage() {
     fetchItems();
   }, []);
 
-  const handleSwipe = async (direction: "left" | "right" | "up") => {
+  // TODO: Check if user play session exist
+  // If not then return to /
+  // If there is a session then load history
+  // Also add loading state for that
+
+  const handleSwipe = (direction: "left" | "right" | "up") => {
     const currentFood = foods[currentIndex];
     let status: SwipeStatus = "dislike";
 
@@ -94,14 +103,22 @@ export default function SwipePage() {
 
     if (direction === "up" || currentIndex >= foods.length - 1 && isLoading === false) {
       setIsFinished(true);
+      // TODO: Fetch end
     } else {
       setCurrentIndex((prev) => prev + 1);
+
+      const foodBuffer = 5;
+      if (currentIndex >= foods.length - foodBuffer) {
+        const dislikeId = history
+          .filter((h) => h.status === "dislike")
+          .map((h) => h.id);
+        // TODO:Fetch foods
+      }
     }
   };
 
   if (isFinished) {
-    const finalChoice =
-      history.find((h) => h.status === "eat") || history[history.length - 1];
+    const finalChoice = foods[currentIndex];
 
     return (
       <div className="container mx-auto px-4 py-12 flex flex-col items-center max-w-lg">
@@ -194,27 +211,9 @@ export default function SwipePage() {
         </AnimatePresence>
 
         {/* Manual buttons for accessibility as per requirement */}
-        <div className="absolute -bottom-20 left-0 right-0 flex justify-center gap-6 pointer-events-auto">
-          <button
-            onClick={() => handleSwipe("left")}
-            className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-red-500 shadow-lg transition-transform hover:scale-110 active:scale-95 border border-slate-100"
-          >
-            <X className="h-8 w-8" />
-          </button>
-          <button
-            onClick={() => handleSwipe("up")}
-            className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-blue-500 shadow-lg transition-transform hover:scale-110 active:scale-95 border border-slate-100"
-          >
-            <UtensilsCrossed className="h-6 w-6" />
-          </button>
-          <button
-            onClick={() => handleSwipe("right")}
-            className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-green-500 shadow-lg transition-transform hover:scale-110 active:scale-95 border border-slate-100"
-          >
-            <Heart className="h-8 w-8" />
-          </button>
-        </div>
-
+        <SwipeButtons handleSwipe={handleSwipe} />
+        
+        {/* No foods left*/}
         {!isLoading && currentIndex >= foods?.length && (
           <div className="absolute inset-0 flex items-center justify-center text-center p-8 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
             <div className="space-y-4">
@@ -229,3 +228,32 @@ export default function SwipePage() {
     </div>
   );
 }
+
+const SwipeButtons = ({
+  handleSwipe,
+}: {
+  handleSwipe: (direction: "left" | "right" | "up") => void;
+}) => {
+  return (
+    <div className="absolute -bottom-20 left-0 right-0 flex justify-center gap-6 pointer-events-auto">
+      <button
+        onClick={() => handleSwipe("left")}
+        className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-red-500 shadow-lg transition-transform hover:scale-110 active:scale-95 border border-slate-100"
+      >
+        <X className="h-8 w-8" />
+      </button>
+      <button
+        onClick={() => handleSwipe("up")}
+        className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-blue-500 shadow-lg transition-transform hover:scale-110 active:scale-95 border border-slate-100"
+      >
+        <UtensilsCrossed className="h-6 w-6" />
+      </button>
+      <button
+        onClick={() => handleSwipe("right")}
+        className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-green-500 shadow-lg transition-transform hover:scale-110 active:scale-95 border border-slate-100"
+      >
+        <Heart className="h-8 w-8" />
+      </button>
+    </div>
+  );
+};

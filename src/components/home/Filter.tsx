@@ -64,6 +64,11 @@ export function Filter({ onFilterChange }: FilterProps) {
     setPriceRange([0, 500]);
   };
 
+  const handleSlider = ([min, max]: [number, number]) => {
+    if (min >= max) return;
+    setPriceRange([min, max]);
+  };
+
   useEffect(() => {
     onFilterChange({ tags: selectedTags, shops: selectedShops, priceRange });
   }, [selectedTags, selectedShops, priceRange, onFilterChange]);
@@ -146,7 +151,7 @@ export function Filter({ onFilterChange }: FilterProps) {
             max={500}
             step={5}
             value={priceRange}
-            onValueChange={(val) => setPriceRange(val as [number, number])}
+            onValueChange={(val) => handleSlider(val as [number, number])}
             className="**:[role=slider]:bg-green-600 **:[role=slider]:border-green-600"
           />
         </div>
