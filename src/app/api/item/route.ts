@@ -33,11 +33,11 @@ export async function POST(req: Request) {
  
         const foodDb = await prisma.food.findFirst({
             where: {
-                foodName: { equals: name }
+                name: { equals: name }
             },
             select: {
                 id: true,
-                foodName: true
+                name: true
             }
         });
 
@@ -47,7 +47,7 @@ export async function POST(req: Request) {
         if (!foodId) {
             const savedFood = await prisma.food.create({
                 data: {
-                    foodName: name,
+                    name: name,
                     image: buffer, // Prisma maps Buffer to 'Bytes' type in DB
                     
                 },

@@ -165,7 +165,7 @@ export type RecordScalarFieldEnum = (typeof RecordScalarFieldEnum)[keyof typeof 
 export const FoodScalarFieldEnum = {
   id: 'id',
   image: 'image',
-  foodName: 'foodName',
+  name: 'name',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

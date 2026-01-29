@@ -10,7 +10,7 @@ export async function POST(req: Request) {
         const newShop = await prisma.shop.createMany({
             data: body
         });
-        return NextResponse.json({ status: 'success', data: body }, { status: 200 });
+        return NextResponse.json({ status: 'success', data: newShop }, { status: 200 });
 
 
     } catch (error) { }

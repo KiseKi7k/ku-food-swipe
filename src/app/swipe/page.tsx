@@ -20,6 +20,7 @@ import { RecordStatus } from "@/generated/enums"; // Use generated Enum
 import { Food, SwipeHistory } from "@/types/food";
 import { FoodItem } from "../type/food";
 import { it } from "node:test";
+import { Spinner } from "@/components/ui/spinner"
 
 export default function SwipePage() {
 
@@ -49,7 +50,7 @@ export default function SwipePage() {
       const data = await response.json();
       const formatted: Food[] = data.data.map((item: FoodItem) => ({
         id: item.id,
-        name: item.food?.foodName || "Unknown",
+        name: item.food?.name || "Unknown",
         price: item.priceMin || 0,
         shop: item.shop?.name || "Unknown Shop",
         // Important: Convert Bytes/Buffer to Base64 string for the <img> tag
@@ -194,11 +195,11 @@ export default function SwipePage() {
                   <h2 className="text-2xl font-bold text-slate-800 mb-2">
                     {finalChoice.name}
                   </h2>
-                  <div className="flex items-center justify-between">
-                    <span className="text-green-600 font-semibold px-3 py-1 bg-green-50 rounded-full text-sm border border-green-100">
+                  <div className="flex items-center  justify-between">
+                    <span className="text-white-600 font-semibold px-3 py-1 bg-green-50 rounded-full text-sm border border-green-100">
                       ยืนยันเลือกรายการนี้
                     </span>
-                    <span className="text-xl font-bold text-slate-900">
+                    <span className="text-xl  font-bold text-slate-900">
                       ฿{foods.find((f) => f.id === finalChoice.id)?.price}
                     </span>
                   </div>
@@ -235,63 +236,65 @@ export default function SwipePage() {
       <div className="text-center mb-8">
         <h1 className="text-2xl font-bold text-slate-900">ปัดเลือกอาหาร</h1>
         <p className="text-slate-500 text-sm">
-          รายการที่ {currentIndex + 1} จาก {foods.length}
+          {/* รายการที่ {currentIndex + 1} จาก {foods.length} */}
         </p>
       </div>
+      {isLoading && foods.length === 0 ? <div><Spinner className="size-8"/></div> :
 
-      <div className="relative w-full max-w-sm aspect-3/4 mb-24">
-        <AnimatePresence>
-          {foods && foods
-            .slice(currentIndex, currentIndex + 2)
-            .reverse()
-            .map((food, index) => {
-              const isFront =
-                index === 1 ||
-                foods.slice(currentIndex, currentIndex + 2).length === 1;
-              return (
-                <FoodCard
-                  key={food.id}
-                  food={food}
-                  onSwipe={handleSwipe}
-                  isFront={isFront}
-                />
-              );
-            })}
-        </AnimatePresence>
+        <div className="relative w-full max-w-sm aspect-3/4 mb-24">
+          <AnimatePresence>
+            {foods && foods
+              .slice(currentIndex, currentIndex + 2)
+              .reverse()
+              .map((food, index) => {
+                const isFront =
+                  index === 1 ||
+                  foods.slice(currentIndex, currentIndex + 2).length === 1;
+                return (
+                  <FoodCard
+                    key={food.id}
+                    food={food}
+                    onSwipe={handleSwipe}
+                    isFront={isFront}
+                  />
+                );
+              })}
+          </AnimatePresence>
 
-        {/* Manual buttons for accessibility as per requirement */}
-        <div className="absolute -bottom-20 left-0 right-0 flex justify-center gap-6 pointer-events-auto">
-          <button
-            onClick={() => handleSwipe("left")}
-            className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-red-500 shadow-lg transition-transform hover:scale-110 active:scale-95 border border-slate-100"
-          >
-            <X className="h-8 w-8" />
-          </button>
-          <button
-            onClick={() => handleSwipe("up")}
-            className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-blue-500 shadow-lg transition-transform hover:scale-110 active:scale-95 border border-slate-100"
-          >
-            <UtensilsCrossed className="h-6 w-6" />
-          </button>
-          <button
-            onClick={() => handleSwipe("right")}
-            className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-green-500 shadow-lg transition-transform hover:scale-110 active:scale-95 border border-slate-100"
-          >
-            <Heart className="h-8 w-8" />
-          </button>
-        </div>
-
-        {!isLoading && currentIndex >= foods?.length && (
-          <div className="absolute inset-0 flex items-center justify-center text-center p-8 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
-            <div className="space-y-4">
-              <p className="text-slate-400 font-medium">
-                ไม่มีรายการอาหารเหลือแล้ว
-              </p>
-              <Button onClick={() => setIsFinished(true)}>ดูสรุปผล</Button>
-            </div>
+          {/* Manual buttons for accessibility as per requirement */}
+          <div className="absolute -bottom-20 left-0 right-0 flex justify-center gap-6 pointer-events-auto">
+            <button
+              onClick={() => handleSwipe("left")}
+              className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-red-500 shadow-lg transition-transform hover:scale-110 active:scale-95 border border-slate-100"
+            >
+              <X className="h-8 w-8" />
+            </button>
+            <button
+              onClick={() => handleSwipe("up")}
+              className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-blue-500 shadow-lg transition-transform hover:scale-110 active:scale-95 border border-slate-100"
+            >
+              <UtensilsCrossed className="h-6 w-6" />
+            </button>
+            <button
+              onClick={() => handleSwipe("right")}
+              className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-green-500 shadow-lg transition-transform hover:scale-110 active:scale-95 border border-slate-100"
+            >
+              <Heart className="h-8 w-8" />
+            </button>
           </div>
-        )}
-      </div>
+
+          {!isLoading && currentIndex >= foods?.length && (
+            <div className="absolute inset-0 flex items-center justify-center text-center p-8 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
+              <div className="space-y-4">
+                <p className="text-slate-400 font-medium">
+                  ไม่มีรายการอาหารเหลือแล้ว
+                </p>
+                <Button onClick={() => setIsFinished(true)}>ดูสรุปผล</Button>
+              </div>
+            </div>
+          )}
+        </div>
+      }
     </div>
   );
 }

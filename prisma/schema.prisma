@@ -100,7 +100,7 @@ model Record {
 model Food {
   id    String @id @default(uuid())
   image Bytes?
-  foodName  String
+  name  String
   items Item[]
   tags  Tag[]  @relation("foodsToTags")
 

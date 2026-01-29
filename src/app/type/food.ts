@@ -6,7 +6,7 @@ export interface Tag {
 export interface Food {
   id: string;
   image: string | null;
-  foodName: string;
+  name: string;
   tags: Tag[];
 }
 

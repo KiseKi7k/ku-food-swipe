@@ -95,7 +95,7 @@ export function FoodCard({ food, onSwipe, isFront }: FoodCardProps) {
           <div className="space-y-2">
             <div className="flex items-end justify-between">
               <h2 className="text-3xl font-bold">{food.name}</h2>
-              <span className="text-2xl font-bold text-green-400">
+              <span className="text-2xl font-bold text-gray-700">
                 ฿{food.price}
               </span>
             </div>
