@@ -28,7 +28,9 @@ export async function POST(req: Request) {
 
     const foodDb = await prisma.food.findFirst({
       where: {
-        name: { equals: name },
+        name: {
+          equals: name,
+        },
       },
       select: {
         id: true,

@@ -33,14 +33,19 @@ export async function GET(req: NextRequest) {
     }
 
     const itemsRaw = await prisma.item.findMany({
-      include: {
+      select: {
+        id: true,
+        priceMin: true,
+        priceMax: true,
         food: {
-          include: {
+          select: {
+            name: true,
             tags: {
               select: {
                 name: true,
               },
             },
+            image: true,
           },
         },
         shop: {

@@ -12,15 +12,24 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { useRouter } from "next/navigation";
 
 export function Header() {
   const { data } = useSession();
   const { session, user } = data || {};
+  const router = useRouter();
+
+  const returnHome = async () => {
+    await fetch("/api/play/end", {
+      method: "POST",
+    });
+    router.push("/");
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-md">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        <Link href="/" className="flex items-center gap-2">
+        <Link onClick={returnHome} href="/" className="flex items-center gap-2">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-green-600 text-white shadow-lg shadow-green-200">
             <Utensils className="h-6 w-6" />
           </div>

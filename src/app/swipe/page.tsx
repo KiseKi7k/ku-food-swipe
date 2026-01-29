@@ -6,7 +6,6 @@ import { FoodCard } from "@/components/swipe/FoodCard";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
-  RefreshCcw,
   Home as HomeIcon,
   CheckCircle2,
   Heart,
@@ -15,10 +14,13 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { Food, SwipeStatus, RawFoodItem } from "@/types/food";
+import { useRouter } from "next/navigation";
+import { RecordStatus } from "@/generated/enums";
+import { UserPlay } from "@/types/other";
 
 type History = {
   id: string;
-  status: SwipeStatus;
+  status: RecordStatus;
 };
 
 export default function SwipePage() {
@@ -32,11 +34,42 @@ export default function SwipePage() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
+  const router = useRouter();
+
+  // Check if user play session exist
+  // If not then return to /
+  // If there is a session then load history
+  // Also add loading state for that
+  useEffect(() => {
+    const hasUserPlayId = document.cookie.includes("userPlayId");
+    if (!hasUserPlayId) {
+      router.push("/");
+      return;
+    }
+
+    const fetchPlaySession = async () => {
+      const res = await fetch(`/api/play`, {});
+      if (!res.ok) return;
+      const data = await res.json();
+      const userPlay: UserPlay = data.data;
+
+      if (userPlay.records.length > 0) {
+        setHistory(
+          userPlay.records.map((record) => ({
+            id: record.itemId,
+            status: record.status,
+          })),
+        );
+      }
+    };
+    fetchPlaySession();
+  }, []);
+
   useEffect(() => {
     const fetchItems = async () => {
       try {
         // Replace with your actual API endpoint
-        const response = await fetch("/api/play/list");
+        const response = await fetch("/api/item/list");
         if (!response.ok) throw new Error("Failed to fetch items");
 
         const { data } = await response.json();
@@ -67,17 +100,12 @@ export default function SwipePage() {
     fetchItems();
   }, []);
 
-  // TODO: Check if user play session exist
-  // If not then return to /
-  // If there is a session then load history
-  // Also add loading state for that
-
   const handleSwipe = async (direction: "left" | "right" | "up") => {
     const currentFood = foods[currentIndex];
-    let status: SwipeStatus = "dislike";
+    let status: RecordStatus = "DISLIKE";
 
-    if (direction === "right") status = "like";
-    if (direction === "up") status = "eat";
+    if (direction === "right") status = "LIKE";
+    if (direction === "up") status = "EAT";
 
     const data: any = {
       userPlayId: "5b731e5d-e0d9-4e45-8d8f-b749523e3f08",
@@ -105,18 +133,24 @@ export default function SwipePage() {
       (currentIndex >= foods.length - 1 && isLoading === false)
     ) {
       setIsFinished(true);
-      // TODO: Fetch end
     } else {
       setCurrentIndex((prev) => prev + 1);
 
       const foodBuffer = 5;
       if (currentIndex >= foods.length - foodBuffer) {
         const dislikeId = history
-          .filter((h) => h.status === "dislike")
+          .filter((h) => h.status === "DISLIKE")
           .map((h) => h.id);
         // TODO:Fetch foods
       }
     }
+  };
+
+  const handleEnd = async () => {
+    await fetch("/api/play/end?success=true", {
+      method: "POST",
+    });
+    router.push("/");
   };
 
   if (isFinished) {
@@ -162,7 +196,7 @@ export default function SwipePage() {
         </Card>
 
         <div className="grid grid-cols-2 gap-4 w-full">
-          <Button
+          {/* <Button
             variant="outline"
             className="h-12 rounded-xl gap-2 hover:bg-slate-50"
             onClick={() => {
@@ -172,9 +206,12 @@ export default function SwipePage() {
             }}
           >
             <RefreshCcw className="h-4 w-4" /> เลือกใหม่
-          </Button>
+          </Button> */}
           <Link href="/" className="w-full">
-            <Button className="h-12 w-full rounded-xl gap-2 bg-green-600 hover:bg-green-700">
+            <Button
+              onClick={handleEnd}
+              className="h-12 w-full rounded-xl gap-2 bg-green-600 hover:bg-green-700"
+            >
               <HomeIcon className="h-4 w-4" /> กลับหน้าหลัก
             </Button>
           </Link>

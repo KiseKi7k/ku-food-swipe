@@ -4,10 +4,11 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Filter } from "@/components/home/Filter";
 import { ArrowRight, Sparkles } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
-  // TODO: Check if user play session exist if then go to /swipe
+  const router = useRouter();
 
   const [filters, setFilters] = useState({
     tags: [] as string[],
@@ -15,10 +16,27 @@ export default function Home() {
     priceRange: [0, 500] as [number, number],
   });
 
-  const handleStart = () => {
-    // TODO: Create play session
-    // TODO: Redirect to /swipe
+  const handleStart = async () => {
+    const res = await fetch("/api/play/start", {
+      method: "POST",
+    });
+
+    // TODO: Add filter later
+    if (res.ok) {
+      router.push("/swipe");
+    }
   };
+
+  // Check if user play session exist if then go to /swipe
+  useEffect(() => {
+    const checkSession = async () => {
+      const res = await fetch("/api/play");
+      if (res.ok) {
+        router.push("/swipe");
+      }
+    };
+    checkSession();
+  }, []);
 
   return (
     <div className="container mx-auto px-4 py-8 md:py-16 flex flex-col items-center">
