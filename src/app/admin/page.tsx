@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, DragEvent, FormEvent } from "react";
+import { useState, DragEvent, FormEvent, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { FoodItem } from "../type/food";
 import {
   Plus,
   Trash2,
@@ -52,39 +53,137 @@ export default function AdminPage() {
     shop: "",
     image: "",
   });
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [dragActive, setDragActive] = useState(false);
+  const [imageUrl, setImageUrl] = useState(false);
+  const [tagsSelected, setTagsSelected] = useState<string[]>([]);
 
-  const handleAddFood = (e: FormEvent) => {
+  const [shops, setShops] = useState([]);
+  const [items, setItems] = useState<FoodItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+
+
+
+  useEffect(() => {
+    const fetchShops = async () => {
+      try {
+        // Replace with your actual API endpoint
+        const response = await fetch('/api/shop/list');
+        if (!response.ok) throw new Error('Failed to fetch shops');
+
+        const data = await response.json();
+        setShops(data.data);
+        // console.log("Fetched shops:", data.data);
+      } catch (err) {
+        setError("error fetching shops");
+      }
+    };
+
+    fetchShops();
+  }, []);
+  const fetchItems = async () => {
+    try {
+      // Replace with your actual API endpoint
+      const response = await fetch('/api/item/list');
+      if (!response.ok) throw new Error('Failed to fetch items');
+
+      const data = await response.json();
+      setItems(data.data);
+      // console.log("Fetched items:", data.data[0].Shop.Name); 
+    } catch (err) {
+      setError("error fetching shops");
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+
+
+    fetchItems();
+  }, []);
+
+
+  if (loading) return <p className="text-sm text-slate-400">กำลังโหลดข้อมูล...</p>;
+  if (error) return <p className="text-sm text-red-500">เกิดข้อผิดพลาด: {error}</p>;
+
+  const handleFileSelect = (file: File) => {
+    setSelectedFile(file);
+    // Create preview URL
+    const objectUrl = URL.createObjectURL(file);
+    console.log(objectUrl);
+    setNewFood((prev) => ({ ...prev, image: objectUrl }));
+  };
+
+  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      handleFileSelect(e.target.files[0]);
+    }
+  };
+
+  const handleAddFood = async (e: FormEvent) => {
     e.preventDefault();
     if (!newFood.name || !newFood.price || !newFood.shop) return;
 
-    const foodToAdd: Food = {
-      id: `food-${foods.length + 1}`,
-      name: newFood.name!,
-      price: Number(newFood.price),
-      tags: newFood.tags || [],
-      shop: newFood.shop!,
-      image:
-        newFood.image ||
-        "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=800",
-    };
+    try {
 
-    setFoods([foodToAdd, ...foods]);
-    setNewFood({ name: "", price: 0, tags: [], shop: "", image: "" });
+      if (!selectedFile) { return alert("Please select a file"); }
+      // 1. Prepare FormData
+      let formData = new FormData();
+      formData.append("image", selectedFile);
+      // Append the food details
+      formData.append("price", newFood.price!.toString());
+      formData.append("Name", newFood.name);
+      formData.append("tags", tagsSelected.join(","));
+      formData.append("shopId", newFood.shop);
+      console.log("FormData Name:", formData);
+      // 2. Upload to API
+      const res = await fetch("/api/item", {
+        method: "POST",
+        body: formData
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to upload");
+      }
+
+      const data = await res.json();
+      const newId = data.id;
+
+      setNewFood({ name: "", price: 0, tags: [], shop: "", image: "" });
+      setSelectedFile(null);
+    } catch (error) {
+      console.error("Error adding food:", error);
+      alert("Error adding food");
+    }
   };
 
-  const handleDeleteFood = (id: string) => {
-    setFoods(foods.filter((f) => f.id !== id));
+  const handleDeleteFood = async (id: string) => {
+
+    if (confirm("Are you sure you want to delete this item?")) {
+      const res = await fetch(`/api/item/delete/${id}`, {
+          method: "DELETE",
+        });
+        if(res.ok){fetchItems();}
+    
+
+    }
   };
 
   const toggleTag = (tag: string) => {
     setNewFood((prev) => {
       const tags = prev.tags || [];
+      const nextTags = tags.includes(tag)
+        ? tags.filter((t) => t !== tag)
+        : [...tags, tag];
+
+      // Log the result here before returning
+      console.log("Updated Tags:", nextTags);
+      setTagsSelected(nextTags)
       return {
         ...prev,
-        tags: tags.includes(tag)
-          ? tags.filter((t) => t !== tag)
-          : [...tags, tag],
+        tags: nextTags,
       };
     });
   };
@@ -103,8 +202,9 @@ export default function AdminPage() {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
-    // In a real app, you'd handle the file upload here
-    // For mock, we'll just show a notification or placeholder
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      handleFileSelect(e.dataTransfer.files[0]);
+    }
   };
 
   return (
@@ -177,10 +277,12 @@ export default function AdminPage() {
                           setNewFood({ ...newFood, shop: e.target.value })
                         }
                       >
-                        <option value="">เลือกรานค้า</option>
-                        {SHOPS.map((shop) => (
-                          <option key={shop} value={shop}>
-                            {shop}
+                        <option value="">เลือกร้านค้า</option>
+                        {shops.map((shop) => (
+
+                          // Use shop.id for the keyvalue and shop.name for the label
+                          <option key={shop['id'] || shop} value={shop['id'] || shop}>
+                            {shop['Name'] || shop}
                           </option>
                         ))}
                       </select>
@@ -196,11 +298,10 @@ export default function AdminPage() {
                           variant={
                             newFood.tags?.includes(tag) ? "default" : "outline"
                           }
-                          className={`cursor-pointer px-4 py-1.5 text-sm transition-all ${
-                            newFood.tags?.includes(tag)
-                              ? "bg-green-600 border-transparent"
-                              : "hover:border-green-400"
-                          }`}
+                          className={`cursor-pointer px-4 py-1.5 text-sm transition-all ${newFood.tags?.includes(tag)
+                            ? "bg-green-600 border-transparent"
+                            : "hover:border-green-400"
+                            }`}
                           onClick={() => toggleTag(tag)}
                         >
                           {tag}
@@ -226,26 +327,55 @@ export default function AdminPage() {
                 </CardHeader>
                 <CardContent className="p-6">
                   <div
-                    className={`aspect-square rounded-2xl border-2 border-dashed flex flex-col items-center justify-center p-4 text-center transition-all ${
-                      dragActive
-                        ? "border-green-500 bg-green-50"
-                        : "border-slate-200 bg-slate-50"
-                    }`}
+                    className={`aspect-square rounded-2xl border-2 border-dashed flex flex-col items-center justify-center p-4 text-center transition-all ${dragActive
+                      ? "border-green-500 bg-green-50"
+                      : "border-slate-200 bg-slate-50"
+                      }`}
                     onDragEnter={handleDrag}
                     onDragLeave={handleDrag}
                     onDragOver={handleDrag}
                     onDrop={handleDrop}
                   >
-                    <div className="h-12 w-12 rounded-full bg-white shadow-sm flex items-center justify-center mb-4">
-                      <Upload className="h-6 w-6 text-slate-400" />
-                    </div>
-                    <p className="text-sm font-medium text-slate-600">
-                      Drag & Drop
-                    </p>
-                    <p className="text-xs text-slate-400 mt-1">
-                      หรือคลิกเพื่อเลือกไฟล์
-                    </p>
-                    <Input type="file" className="hidden" />
+                    {newFood.image ? (
+                      <div className="relative w-full h-full group">
+                        <img src={newFood.image} alt="Preview" className="w-full h-full object-cover rounded-xl" />
+                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-xl cursor-pointer" onClick={() => {
+                          setNewFood({ ...newFood, image: "" });
+                          setSelectedFile(null);
+                        }}>
+                          <Trash2 className="text-white h-8 w-8" />
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="relative group border-2 border-dashed border-slate-200 rounded-xl p-8 flex flex-col items-center justify-center overflow-hidden">
+                          {/* Icon Circle */}
+                          <div className="h-12 w-12 rounded-full bg-white shadow-sm flex items-center justify-center mb-4">
+                            <Upload className="h-6 w-6 text-slate-400" />
+                          </div>
+
+                          {/* Text Info */}
+                          <p className="text-sm font-medium text-slate-600">
+                            Drag & Drop
+                          </p>
+                          <p className="text-xs text-slate-400 mt-1">
+                            หรือคลิกเพื่อเลือกไฟล์
+                          </p>
+
+                          {/* The Hidden Input & Full-Box Label */}
+                          <label htmlFor="file-upload" className="cursor-pointer inset-0 absolute" />
+
+                        </div>
+
+                        <Input
+                          id="file-upload"
+                          type="file"
+                          className="hidden"
+                          accept="image/*"
+                          onChange={onFileChange}
+                        />
+                      </>
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -293,43 +423,44 @@ export default function AdminPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
-                    {foods.slice(0, 20).map((food) => (
+                    {items && items?.slice(0, 20).map((food) => (
                       <tr
-                        key={food.id}
+                        key={food['id']}
                         className="hover:bg-slate-50/50 transition-colors"
                       >
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
                             <div className="h-10 w-10 rounded-lg overflow-hidden bg-slate-100">
                               <img
-                                src={food.image}
+                                src={food.foods?.image || ""}
                                 alt=""
                                 className="h-full w-full object-cover"
                               />
                             </div>
                             <span className="font-medium text-slate-800">
-                              {food.name}
+                              {food.foods?.foodName}
                             </span>
                           </div>
                         </td>
                         <td className="px-6 py-4 text-slate-600">
                           <div className="flex items-center gap-2">
                             <StoreIcon className="h-4 w-4" />
-                            {food.shop}
+                            {food.Shop?.Name ? food.Shop?.Name : "ไม่มีร้านค้า"}
+
                           </div>
                         </td>
                         <td className="px-6 py-4 font-bold text-slate-900">
-                          ฿{food.price}
+                          ฿{food.priceMin}
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex flex-wrap gap-1">
-                            {food.tags.map((tag) => (
+                            {food.foods?.tags?.map((tag) => (
                               <Badge
-                                key={tag}
+                                key={tag.id}
                                 variant="secondary"
                                 className="px-2 py-0 text-[10px] font-normal"
                               >
-                                {tag}
+                                {tag.Name}
                               </Badge>
                             ))}
                           </div>
@@ -339,7 +470,7 @@ export default function AdminPage() {
                             variant="ghost"
                             size="icon"
                             className="text-red-500 hover:text-red-600 hover:bg-red-50"
-                            onClick={() => handleDeleteFood(food.id)}
+                            onClick={() => handleDeleteFood(food['id'])}
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>

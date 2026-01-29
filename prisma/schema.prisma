@@ -122,8 +122,10 @@ model Item {
   foodId   String @map("food_id")
   priceMin Int
   priceMax Int?
-  foods    Food   @relation(fields: [foodId], references: [id])
-
+  shopId  String? @map("shop_id")
+  Shop   Shop?  @relation(fields: [shopId], references: [id])
+  foods    Foods  @relation(fields: [foodId], references: [id])
+  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -133,7 +135,8 @@ model Shop {
   Name       String
   locationId String   @map("location_id")
   location   Location @relation(fields: [locationId], references: [id])
-
+  Items Items[]
+  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

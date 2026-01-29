@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import { mockFoods } from "@/utils/food/mock";
 import { FoodCard } from "@/components/swipe/FoodCard";
@@ -15,18 +15,61 @@ import {
   X,
 } from "lucide-react";
 import Link from "next/link";
-import { SwipeStatus } from "@/types/food";
-
+import { Food, SwipeHistory, SwipeStatus } from "@/types/food";
+import { FoodItem } from "../type/food";
+import { it } from "node:test";
 type History = {
   id: string;
   status: SwipeStatus;
 };
 
 export default function SwipePage() {
-  const [foods, setFoods] = useState(mockFoods);
+
+
+  // const [foods, setFoods] = useState(mockFoods);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [history, setHistory] = useState<History[]>([]);
   const [isFinished, setIsFinished] = useState(false);
+  // const [items, setItems] = useState<FoodItem[]>([]);
+  const [foods, setFoods] = useState<Food[]>([]);
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+
+
+
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        // Replace with your actual API endpoint
+        const response = await fetch('/api/play/list');
+        if (!response.ok) throw new Error('Failed to fetch items');
+
+        const data = await response.json();
+        const formatted: Food[] = data.data.map((item: FoodItem) => ({
+          id: item.id,
+          name: item.foods?.foodName || "Unknown",
+          price: item.priceMin || 0,
+          shop: item.Shop?.Name || "Unknown Shop",
+          // Important: Convert Bytes/Buffer to Base64 string for the <img> tag
+          image: item.foods?.image
+            ? item.foods.image
+            : "/placeholder.jpg",
+          // Flatten the tags: from [{id: 1, Name: "Tag"}] to ["Tag"]
+          tags: item.foods?.tags?.map((t: any) => t.Name) || [],
+        }));
+        console.log("Formatted items:", formatted);
+
+        setFoods(formatted);
+        // console.log("Fetched items:", data.data[0].Shop.Name); 
+      } catch (err) {
+        setError("error fetching shops");
+      } finally { setIsLoading(false) };
+    };
+
+
+
+    fetchItems();
+  }, []);
 
   // TODO: Check if user play session exist
   // If not then return to /
@@ -39,11 +82,26 @@ export default function SwipePage() {
 
     if (direction === "right") status = "like";
     if (direction === "up") status = "eat";
-
-    const newHistory = [...history, { id: currentFood.id, status }];
+    const data: any = {
+      userPlayId: "5b731e5d-e0d9-4e45-8d8f-b749523e3f08",
+      status: status,
+      itemId: currentFood.id
+    }
+    console.log("Swipe data:", data);
+    const res = await fetch("/api/play/records", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data), // 'data' should be a plain object
+    });
+    const newHistory = [
+      ...history,
+      { id: currentFood.id, name: currentFood.name, status },
+    ];
     setHistory(newHistory);
 
-    if (direction === "up" || currentIndex >= foods.length - 1) {
+    if (direction === "up" || currentIndex >= foods.length - 1 && isLoading === false) {
       setIsFinished(true);
       // TODO: Fetch end
     } else {
@@ -134,7 +192,7 @@ export default function SwipePage() {
 
       <div className="relative w-full max-w-sm aspect-3/4 mb-24">
         <AnimatePresence>
-          {foods
+          {foods && foods
             .slice(currentIndex, currentIndex + 2)
             .reverse()
             .map((food, index) => {
@@ -154,9 +212,9 @@ export default function SwipePage() {
 
         {/* Manual buttons for accessibility as per requirement */}
         <SwipeButtons handleSwipe={handleSwipe} />
-
+        
         {/* No foods left*/}
-        {currentIndex >= foods.length && (
+        {!isLoading && currentIndex >= foods?.length && (
           <div className="absolute inset-0 flex items-center justify-center text-center p-8 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
             <div className="space-y-4">
               <p className="text-slate-400 font-medium">
