@@ -1,19 +1,41 @@
+import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { NextRequest, NextResponse } from "next/server";
+import { headers } from "next/headers";
+import { NextResponse } from "next/server";
 
-export async function POST(req: Request) {
+export async function POST() {
   try {
-    const data = await req.json();
-    const userPlays = await prisma.userPlay.create({
-      data: data,
+    const authRes = await auth.api.getSession({
+      headers: await headers(),
     });
 
-    return NextResponse.json(
-      { status: "success", data: userPlays },
+    const userPlay = await prisma.userPlay.create({
+      data: {
+        status: "ACTIVE",
+        users: {
+          connect: {
+            id: authRes?.user?.id,
+          },
+        },
+      },
+    });
+
+    const res = NextResponse.json(
+      { status: "success", data: userPlay },
       { status: 200 },
     );
+
+    res.cookies.set("userPlayId", userPlay.id, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 7,
+    });
+
+    return res;
   } catch (error: any) {
-    console.error("Prisma Error:", error); // Check your terminal for this!
+    console.error("Prisma Error:", error);
     return NextResponse.json(
       { status: "error", message: error.message },
       { status: 500 },

@@ -1,6 +1,8 @@
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
+// TODO: Remove this later
+
 const shuffleArray = <T>(array: T[]): T[] => {
   const shuffled = [...array]; // Create a copy so you don't mutate the original
   for (let i = shuffled.length - 1; i > 0; i--) {

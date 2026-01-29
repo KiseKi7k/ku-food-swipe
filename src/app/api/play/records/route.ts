@@ -1,5 +1,8 @@
 import prisma from "@/lib/prisma";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
+
+// TODO: What's does this endpoint do
+// It should be on reccommend
 
 export async function POST(req: Request) {
   try {
