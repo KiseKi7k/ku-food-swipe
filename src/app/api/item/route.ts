@@ -31,7 +31,7 @@ export async function POST(req: Request) {
         const arrayBuffer = await file.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
  
-        const foodDb = await prisma.foods.findFirst({
+        const foodDb = await prisma.food.findFirst({
             where: {
                 foodName: { equals: name }
             },
@@ -45,18 +45,16 @@ export async function POST(req: Request) {
         // // 3. Save to Database
         let foodId = foodDb ? foodDb.id : null;
         if (!foodId) {
-            const savedFood = await prisma.foods.create({
+            const savedFood = await prisma.food.create({
                 data: {
                     foodName: name,
                     image: buffer, // Prisma maps Buffer to 'Bytes' type in DB
-                    tags: {
-                        create: tagsArray
-                    }
+                    
                 },
             });
             foodId = savedFood.id;
         }
-        const savedItem = await prisma.items.create({
+        const savedItem = await prisma.item.create({
             data: {
                foodId: foodId,
                shopId: shopId || null,

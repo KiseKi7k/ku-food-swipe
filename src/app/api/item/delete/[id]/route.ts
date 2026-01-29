@@ -8,7 +8,7 @@ export async function DELETE(
     try {
         const { id } = await params;
 
-        const food = await prisma.items.delete({
+        const food = await prisma.item.delete({
             where: { id: id }
         });
 

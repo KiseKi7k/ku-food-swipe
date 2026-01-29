@@ -1,6 +1,6 @@
 export interface Tag {
   id: number;
-  Name: string; 
+  name: string; 
 }
 
 export interface Food {
@@ -12,7 +12,7 @@ export interface Food {
 
 export interface Shop {
   id: string;
-  Name: string;
+  name: string;
   locationId: string;
 }
 
@@ -22,6 +22,6 @@ export interface FoodItem {
   priceMin: number;
   priceMax: number | null;
   shopId: string;
-  foods: Food;
-  Shop: Shop;
+  food: Food;
+  shop: Shop;
 }

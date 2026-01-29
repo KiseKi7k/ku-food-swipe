@@ -7,15 +7,15 @@ export async function GET() {
         return Buffer.from(buffer).toString("base64");
     }
     try {
-        const items = await prisma.items.findMany({ include: { foods: {include: { tags: true }}, Shop: true } }); // Removed unnecessary ({})
+        const items = await prisma.item.findMany({ include: { food: {include: { tags: true }}, shop: true } }); // Removed unnecessary ({})
         let datas = items;
         const formattedData = items.map(item => {
     return {
         ...item,
-        foods: item.foods ? {
-            ...item.foods,
+        food: item.food ? {
+            ...item.food,
             // Convert the bytes to Base64 if the image exists
-            image: item.foods.image ? `data:image/jpeg;base64,${bytesToBase64(item.foods.image)}`: null
+            image: item.food.image ? `data:image/jpeg;base64,${bytesToBase64(item.food.image)}`: null
         } : null
     };
 });

@@ -7,10 +7,10 @@ export interface Food {
   shop: string;
 }
 
-export type SwipeStatus = "like" | "dislike" | "eat";
+import { RecordStatus } from "@/generated/enums";
 
 export interface SwipeHistory {
   id: string;
   name: string;
-  status: SwipeStatus;
+  status: RecordStatus;
 }

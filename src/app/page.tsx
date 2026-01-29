@@ -1,6 +1,7 @@
 "use client";
 
-import Link from "next/link";
+// import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Filter } from "@/components/home/Filter";
 import { ArrowRight, Sparkles } from "lucide-react";
@@ -13,6 +14,31 @@ export default function Home() {
     priceRange: [0, 500] as [number, number],
   });
 
+  const router = useRouter();
+  const handleStart = async () => {
+    try {
+      // 1. Tell the server to start (your fetch logic)
+      // The server should return 'Set-Cookie' in the response headers
+      const response = await fetch("/api/play/start", {
+        method: "POST", body: JSON.stringify({
+          userId: null,
+          status: "play"
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        document.cookie = `userPlayId=${data.data.id}; path=/;`;
+
+        // 2. Only after the server responds successfully, we go to the play page
+        router.push("/swipe");
+      } else {
+        console.error("Failed to start session");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
   return (
     <div className="container mx-auto px-4 py-8 md:py-16 flex flex-col items-center">
       {/* Hero Section */}
@@ -31,14 +57,15 @@ export default function Home() {
           ให้การเลือกอาหารมื้อนี้เป็นเรื่องง่ายและสนุก
         </p>
         <div className="pt-4 drop-shadow-2xl shadow-green-200">
-          <Link href="/swipe">
-            <Button
-              size="lg"
-              className="h-14 px-8 text-lg bg-green-600 hover:bg-green-700 gap-2 rounded-2xl shadow-xl shadow-green-100 transition-all hover:scale-105 active:scale-95"
-            >
-              เริ่มปัดเลย <ArrowRight className="h-5 w-5" />
-            </Button>
-          </Link>
+
+          <Button
+            size="lg"
+            className="h-14 px-8 text-lg bg-green-600 hover:bg-green-700 gap-2 rounded-2xl shadow-xl shadow-green-100 transition-all hover:scale-105 active:scale-95"
+            onClick={handleStart}
+          >
+            เริ่มปัดเลย <ArrowRight className="h-5 w-5" />
+          </Button>
+
         </div>
       </section>
 

@@ -5,6 +5,7 @@ import { Food } from "@/types/food";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Store } from "lucide-react";
+import Image from "next/image";
 
 interface FoodCardProps {
   food: Food;
@@ -78,9 +79,12 @@ export function FoodCard({ food, onSwipe, isFront }: FoodCardProps) {
 
         {/* Image */}
         <div className="relative h-2/3 w-full rounded-t-3xl">
-          <img
+          {/* <Image */}
+          <Image
             src={food.image}
             alt={food.name}
+            width={100}
+            height={100}
             className="h-full w-full object-cover pointer-events-none rounded-t-3xl"
           />
           <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />
