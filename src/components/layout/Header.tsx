@@ -21,6 +21,7 @@ export function Header() {
 
   const returnHome = async () => {
     await fetch("/api/play/end", {
+      // TODO: If there is no cookie it shouldnt fetch
       method: "POST",
     });
     router.push("/");

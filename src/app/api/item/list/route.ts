@@ -9,6 +9,8 @@ export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
   const partial = searchParams.get("partial") === "true"; // For AI Fetch
 
+  const limit = searchParams.get("limit");
+
   try {
     if (partial) {
       const items = await prisma.item.findMany({
@@ -59,6 +61,7 @@ export async function GET(req: NextRequest) {
           },
         },
       },
+      ...(limit ? { take: parseInt(limit) } : {}),
     });
 
     const items = itemsRaw.map((item) => {

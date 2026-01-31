@@ -13,14 +13,29 @@ import {
   X,
 } from "lucide-react";
 import Link from "next/link";
-import { Food, SwipeStatus, RawFoodItem } from "@/types/food";
+import { Food, RawFoodItem } from "@/types/food";
 import { useRouter } from "next/navigation";
 import { RecordStatus } from "@/generated/enums";
 import { UserPlay } from "@/types/other";
 
 type History = {
-  id: string;
+  itemId: string;
   status: RecordStatus;
+};
+
+const mapRawItem = (item: RawFoodItem): Food => {
+  return {
+    id: item.id,
+    name: item.food.name || "Unknown",
+    tags: item.food.tags?.map((t) => t.name) || [],
+
+    priceMin: item.priceMin || 0,
+    priceMax: item.priceMax || 0,
+
+    shop: item.shop?.name || "Unknown Shop",
+    location: item.shop?.location.name || "Unknown Location",
+    image: item.food.image ? item.food.image : "/placeholder.jpg",
+  };
 };
 
 export default function SwipePage() {
@@ -56,7 +71,7 @@ export default function SwipePage() {
       if (userPlay.records.length > 0) {
         setHistory(
           userPlay.records.map((record) => ({
-            id: record.itemId,
+            itemId: record.itemId,
             status: record.status,
           })),
         );
@@ -69,27 +84,17 @@ export default function SwipePage() {
     const fetchItems = async () => {
       try {
         // Replace with your actual API endpoint
-        const response = await fetch("/api/item/list");
+        const response = await fetch("/api/item/list?limit=10");
         if (!response.ok) throw new Error("Failed to fetch items");
 
         const { data } = await response.json();
 
-        const foods: Food[] = (data as RawFoodItem[]).map((item) => ({
-          id: item.id,
-          name: item.food.name || "Unknown",
-          tags: item.food.tags?.map((t) => t.name) || [],
-
-          priceMin: item.priceMin || 0,
-          priceMax: item.priceMax || 0,
-
-          shop: item.shop?.name || "Unknown Shop",
-          location: item.shop?.location.name || "Unknown Location",
-          image: item.food.image ? item.food.image : "/placeholder.jpg",
-        }));
+        const foods: Food[] = (data as RawFoodItem[]).map((item) =>
+          mapRawItem(item),
+        );
         console.log("Foods:", foods);
 
         setFoods(foods);
-        // console.log("Fetched items:", data.data[0].Shop.Name);
       } catch (err) {
         setError("error fetching shops");
       } finally {
@@ -103,29 +108,10 @@ export default function SwipePage() {
   const handleSwipe = async (direction: "left" | "right" | "up") => {
     const currentFood = foods[currentIndex];
     let status: RecordStatus = "DISLIKE";
-
     if (direction === "right") status = "LIKE";
     if (direction === "up") status = "EAT";
 
-    const data: any = {
-      userPlayId: "5b731e5d-e0d9-4e45-8d8f-b749523e3f08",
-      status: status,
-      itemId: currentFood.id,
-    };
-    console.log("Swipe data:", data);
-
-    const res = await fetch("/api/play/records", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data), // 'data' should be a plain object
-    });
-
-    const newHistory = [
-      ...history,
-      { id: currentFood.id, name: currentFood.name, status },
-    ];
+    const newHistory = [...history, { itemId: currentFood.id, status }];
     setHistory(newHistory);
 
     if (
@@ -138,12 +124,35 @@ export default function SwipePage() {
 
       const foodBuffer = 5;
       if (currentIndex >= foods.length - foodBuffer) {
-        const dislikeId = history
-          .filter((h) => h.status === "DISLIKE")
-          .map((h) => h.id);
-        // TODO:Fetch foods
+        await fetchRecommendFoods();
       }
     }
+  };
+
+  const fetchRecommendFoods = async () => {
+    const dislikeId = history
+      .filter((h) => h.status === "DISLIKE")
+      .map((h) => h.itemId);
+    // TODO: Fetch foods
+
+    const res = await fetch("/api/item/recommend", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        dislikeId,
+        records: history,
+      }),
+    });
+
+    const { data } = await res.json();
+    const newFoods: Food[] = (data as RawFoodItem[]).map((item) =>
+      mapRawItem(item),
+    );
+    console.log("New Foods:", newFoods);
+
+    setFoods((prev) => [...prev, ...newFoods]);
   };
 
   const handleEnd = async () => {
