@@ -9,31 +9,6 @@ import { Slider } from "@/components/ui/slider";
 import { X } from "lucide-react";
 import type { Location, Tag } from "@/types/other";
 
-const TAG_OPTIONS = [
-  "ข้าว",
-  "ปลา",
-  "หมู",
-  "ไก่",
-  "ผัก",
-  "น้ำ",
-  "ของหวาน",
-  "ก๋วยเตี๋ยว",
-  "เผ็ด",
-  "เส้น",
-];
-const SHOPS = [
-  "ร้านลุงหนวด",
-  "ครัวเจ๊เหมียว",
-  "KU Food Court",
-  "ร้านป้าข้างหอ",
-  "The Greenery",
-  "สวนอาหารเกษตร",
-  "โรงอาหารกลาง",
-  "ร้านอาหารใบหน้า",
-  "ร้านน้องมุก",
-  "ครัวนิสิต",
-];
-
 interface FilterProps {
   onFilterChange: (filters: {
     tags: string[];

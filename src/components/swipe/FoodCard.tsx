@@ -24,7 +24,7 @@ export function FoodCard({ food, onSwipe, isFront }: FoodCardProps) {
   const dislikeOpacity = useTransform(x, [-50, -150], [0, 1]);
   const eatOpacity = useTransform(y, [-50, -150], [0, 1]);
 
-  const handleDragEnd = (_: any, info: PanInfo) => {
+  const handleDragEnd = (_: unknown, info: PanInfo) => {
     if (info.offset.x > 100) {
       onSwipe("right");
     } else if (info.offset.x < -100) {

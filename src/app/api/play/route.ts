@@ -6,7 +6,7 @@ export async function GET(req: NextRequest) {
     const userPlayId = req.cookies.get("userPlayId")?.value;
     if (!userPlayId) {
       return NextResponse.json(
-        { status: "error", data: null },
+        { status: "Session not found", data: null },
         { status: 404 },
       );
     }

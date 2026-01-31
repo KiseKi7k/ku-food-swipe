@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Filter } from "@/components/home/Filter";
 import { ArrowRight, Sparkles } from "lucide-react";
@@ -16,12 +15,12 @@ export default function Home() {
     priceRange: [0, 500] as [number, number],
   });
 
-  const handleStart = async () => {
+  const handleStart = async (e: React.MouseEvent) => {
+    e.preventDefault();
     const res = await fetch("/api/play/start", {
       method: "POST",
     });
 
-    // TODO: Add filter later
     if (res.ok) {
       router.push("/swipe");
     }
@@ -56,15 +55,14 @@ export default function Home() {
           ให้การเลือกอาหารมื้อนี้เป็นเรื่องง่ายและสนุก
         </p>
         <div className="pt-4 drop-shadow-2xl shadow-green-200">
-          <Link href="/swipe">
-            <Button
-              size="lg"
-              className="h-14 px-8 text-lg bg-green-600 hover:bg-green-700 gap-2 rounded-2xl shadow-xl shadow-green-100 transition-all hover:scale-105 active:scale-95"
-              onClick={handleStart}
-            >
-              เริ่มปัดเลย <ArrowRight className="h-5 w-5" />
-            </Button>
-          </Link>
+          <Button
+            type="button"
+            size="lg"
+            className="h-14 px-8 text-lg bg-green-600 hover:bg-green-700 gap-2 rounded-2xl shadow-xl shadow-green-100 transition-all hover:scale-105 active:scale-95"
+            onClick={handleStart}
+          >
+            เริ่มปัดเลย <ArrowRight className="h-5 w-5" />
+          </Button>
         </div>
       </section>
 

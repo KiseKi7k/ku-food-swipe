@@ -5,20 +5,27 @@ import { NextResponse } from "next/server";
 
 export async function POST() {
   try {
+    console.log("Auth Start");
     const authRes = await auth.api.getSession({
       headers: await headers(),
     });
 
+    console.log("Auth Res:", authRes);
+
     const userPlay = await prisma.userPlay.create({
       data: {
         status: "ACTIVE",
-        users: {
-          connect: {
-            id: authRes?.user?.id,
-          },
-        },
+        users: authRes?.user?.id
+          ? {
+              connect: {
+                id: authRes.user.id,
+              },
+            }
+          : undefined,
       },
     });
+
+    console.log("User Play:", userPlay);
 
     const res = NextResponse.json(
       { status: "success", data: userPlay },
@@ -27,7 +34,7 @@ export async function POST() {
 
     res.cookies.set("userPlayId", userPlay.id, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
       maxAge: 60 * 60 * 24 * 7,

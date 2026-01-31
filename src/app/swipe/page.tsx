@@ -17,6 +17,7 @@ import { Food, RawFoodItem } from "@/types/food";
 import { useRouter } from "next/navigation";
 import { RecordStatus } from "@/generated/enums";
 import { UserPlay } from "@/types/other";
+import Image from "next/image";
 
 type History = {
   itemId: string;
@@ -133,7 +134,6 @@ export default function SwipePage() {
     const dislikeId = history
       .filter((h) => h.status === "DISLIKE")
       .map((h) => h.itemId);
-    // TODO: Fetch foods
 
     const res = await fetch("/api/item/recommend", {
       method: "POST",
@@ -178,12 +178,15 @@ export default function SwipePage() {
         <Card className="w-full overflow-hidden rounded-3xl border-none shadow-xl bg-white mb-8">
           <CardContent className="p-0">
             {finalChoice && (
-              <div className="relative">
-                <div className="aspect-4/3 bg-slate-100">
-                  <img
-                    src={foods.find((f) => f.id === finalChoice.id)?.image}
+              <div>
+                <div className="relative aspect-4/3 bg-slate-100">
+                  <Image
+                    src={
+                      foods.find((f) => f.id === finalChoice.id)?.image || ""
+                    }
                     alt={finalChoice.name}
-                    className="h-full w-full object-cover"
+                    fill
+                    className="object-cover"
                   />
                 </div>
                 <div className="p-6">
@@ -204,7 +207,7 @@ export default function SwipePage() {
           </CardContent>
         </Card>
 
-        <div className="grid grid-cols-2 gap-4 w-full">
+        <div className="flex items-center w-2/3">
           {/* <Button
             variant="outline"
             className="h-12 rounded-xl gap-2 hover:bg-slate-50"
@@ -216,7 +219,7 @@ export default function SwipePage() {
           >
             <RefreshCcw className="h-4 w-4" /> เลือกใหม่
           </Button> */}
-          <Link href="/" className="w-full">
+          <Link href="/" className="w-full flex">
             <Button
               onClick={handleEnd}
               className="h-12 w-full rounded-xl gap-2 bg-green-600 hover:bg-green-700"

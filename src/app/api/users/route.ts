@@ -16,15 +16,3 @@ export async function GET() {
     );
   }
 }
-export async function POST(req: Request) {
-  try {
-    const body = await req.json();
-    const newCustomerServices = await prisma.user.createMany({
-      data: body,
-    });
-    return NextResponse.json(
-      { status: "success", data: body },
-      { status: 200 },
-    );
-  } catch (error) {}
-}
