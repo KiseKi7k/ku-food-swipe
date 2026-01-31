@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🍛 KU FOOD SWIPE
 
-## Getting Started
+**KU Food Swipe** เป็นเว็บแอปพลิเคชันที่ออกแบบมาเพื่อแก้ปัญหา "เที่ยงนี้กินอะไรดี?" สำหรับนิสิต บุคลากร เจ้าหน้าที่ และบุคคลภายนอกในมหาวิทยาลัยเกษตรศาสตร์ โดยใช้ระบบการปัด (Swipe) ที่ช่วยให้การค้นหาเมนูอาหารเป็นเรื่องสนุก พร้อมทำความรู้จักร้านค้าและโรงอาหาร (บาร์) ต่างๆ ภายในมหาวิทยาลัยเพิ่มขึ้น
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ✨ Features
+* **Interactive Swiping:** ปัดเพื่อเลือกเมนูที่น่าสนใจ
+* **Food Discovery:** แนะนำร้านอาหารภายในมหาวิทยาลัยเกษตรศาสตร์
+* **Quick Decision:** ช่วยตัดสินใจเลือกเมนูอาหารที่ถูกใจที่สุด
+* **User Friendly:** หน้าตาสวยงาม ใช้งานง่าย เหมาะกับนิสิตทุกชั้นปี
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📸 Screenshots
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 🏠 Main Interface
+หน้าแรกสำหรับเริ่มต้นการใช้งาน
+<br>
+<img src="https://raw.githubusercontent.com/KiseKi7k/ku-food-swipe/refs/heads/assets/assets/main-screen.png" width="400" height="500" alt="Main Screen">
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+### 👆 Swipe Actions
+ระบบการตัดสินใจเลือกอาหาร (ชอบ, ไม่ชอบ)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| **หน้า: ชอบ** | **หน้า: ไม่ชอบ** | **หน้า: เลือกอันนี้แหละ** |
+|:---:|:---:|:---:|
+| <img src="https://raw.githubusercontent.com/KiseKi7k/ku-food-swipe/refs/heads/assets/assets/like-swipe.png" width="250"> | <img src="https://raw.githubusercontent.com/KiseKi7k/ku-food-swipe/refs/heads/assets/assets/dislike-swipe.png" width="250"> | <img src="https://raw.githubusercontent.com/KiseKi7k/ku-food-swipe/refs/heads/assets/assets/eat-swipe.png" width="250"> |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+### 🗂️ Food Cards
+แสดงรายละเอียดเมนูอาหารและร้านค้า
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+<img src="https://raw.githubusercontent.com/KiseKi7k/ku-food-swipe/refs/heads/assets/assets/swipe-1.png" width="350" height='450'> 
+<img src="https://raw.githubusercontent.com/KiseKi7k/ku-food-swipe/refs/heads/assets/assets/swipe-2.png" width="350" height='450'> 
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+### 🏁 Summary
+หน้าสรุปรายการอาหารที่คุณสนใจ
+<br>
+<img src="https://raw.githubusercontent.com/KiseKi7k/ku-food-swipe/refs/heads/assets/assets/result.png" width="600" alt="Summary Screen">
+
+---
+
+## 🛠️ Tech Stack
+* **Website:** NextJs
+* **AI/ML Frameworks:** Scikit-learn(KNN),Typhoon API
+* **Cloud/API Services:** Vercel,Render,PostgreSQL
+* **Other Tools:** Prisma(ORM)
+
+
+---
+
+## 🚀 วิธีการใช้งาน
+1. เปิดเว็บไซต์ **KU Food Swipe**
+2. ในหน้าหลัก กดเริ่มต้นเพื่อเข้าสู่ระบบเลือกอาหาร
+3. **ปัดขวา** หากคุณสนใจเมนูนั้น
+4. **ปัดซ้าย** หากยังไม่ถูกใจเมนูนั้น
+5. **ปัดขึ้น** **"เลือกอันนี้แหละ"** หากต้องการเลือกเมนูนั้นทันที
+6. ตรวจสอบเมนูที่เลือกทั้งหมดได้ใน **หน้าสรุปผล**
+
+---
