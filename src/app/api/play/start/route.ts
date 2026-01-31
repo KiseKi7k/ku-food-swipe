@@ -5,12 +5,9 @@ import { NextResponse } from "next/server";
 
 export async function POST() {
   try {
-    console.log("Auth Start");
     const authRes = await auth.api.getSession({
       headers: await headers(),
     });
-
-    console.log("Auth Res:", authRes);
 
     const userPlay = await prisma.userPlay.create({
       data: {
@@ -24,8 +21,6 @@ export async function POST() {
           : undefined,
       },
     });
-
-    console.log("User Play:", userPlay);
 
     const res = NextResponse.json(
       { status: "success", data: userPlay },

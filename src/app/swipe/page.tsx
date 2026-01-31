@@ -57,15 +57,13 @@ export default function SwipePage() {
   // If there is a session then load history
   // Also add loading state for that
   useEffect(() => {
-    const hasUserPlayId = document.cookie.includes("userPlayId");
-    if (!hasUserPlayId) {
+    const fetchPlaySession = async () => {
+      try {
+        const res = await fetch(`/api/play`, {});
+        if (!res.ok) {
       router.push("/");
       return;
     }
-
-    const fetchPlaySession = async () => {
-      const res = await fetch(`/api/play`, {});
-      if (!res.ok) return;
       const data = await res.json();
       const userPlay: UserPlay = data.data;
 
@@ -76,10 +74,14 @@ export default function SwipePage() {
             status: record.status,
           })),
         );
+        }
+      } catch (error) {
+        console.error("Error fetching session:", error);
+        router.push("/");
       }
     };
     fetchPlaySession();
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     const fetchItems = async () => {
