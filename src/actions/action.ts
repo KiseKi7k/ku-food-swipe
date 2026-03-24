@@ -1,6 +1,8 @@
 "use server";
 
 import prisma from "@/lib/prisma";
+import { itemService } from "@/lib/service";
+import { Filter } from "@/types/type";
 import { unstable_cache } from "next/cache";
 
 export const getFilterData = unstable_cache(

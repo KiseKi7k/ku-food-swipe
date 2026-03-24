@@ -22,7 +22,13 @@ export default function ClientHome({ filterData }: { filterData: FilterData }) {
 
 	const handleStart = async (e: React.MouseEvent) => {
 		e.preventDefault();
-		router.push("/swipe");
+		const params = new URLSearchParams({
+			tagIds: filters.tagIds.join(","),
+			locationIds: filters.locationIds.join(","),
+			priceMin: String(filters.priceRange[0]),
+			priceMax: String(filters.priceRange[1]),
+		});
+		router.push(`/swipe?${params.toString()}`);
 	};
 
 	return (

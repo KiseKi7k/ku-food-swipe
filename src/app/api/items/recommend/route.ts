@@ -1,14 +1,10 @@
 import { RecordStatus } from "@/generated/enums";
 import { itemService } from "@/lib/service";
+import { Filter } from "@/types/type";
 import { NextRequest, NextResponse } from "next/server";
 
 export type RecommendFoodRouteBody = {
-	filter: {
-		tags: string[];
-		locations: string[];
-		priceMin: number;
-		priceMax: number;
-	};
+	filter: Omit<Filter, "seenItems" | "targetItems">;
 	history: {
 		itemId: string;
 		status: RecordStatus;
@@ -22,50 +18,44 @@ export type RecommendFoodRouteBody = {
 // 5. if recommend service not avaiable get item that user haven't seen yet
 export async function POST(req: NextRequest) {
 	try {
-		const searchParams = req.nextUrl.searchParams;
+		let filter = {} as Filter;
+		const limit = 10;
 		const body = (await req.json()) as RecommendFoodRouteBody;
-
-		const limitStr = searchParams.get("limit");
-		const limit = limitStr ? Number(limitStr) : 10;
-
 		const seenItems = body.history.map((h) => h.itemId);
 
-		const controller = new AbortController();
-		setTimeout(() => controller.abort(), 3000);
+		try {
+			const controller = new AbortController();
+			const timeout = setTimeout(() => controller.abort(), 3000);
 
-		const res = await fetch(process.env.RECOMMEND_SERVICE_URL!, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				filter: body.filter,
-				history: body.history,
-			}),
-			signal: controller.signal,
-		});
+			const res = await fetch(process.env.RECOMMEND_SERVICE_URL!, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					filter: body.filter,
+					history: body.history,
+				}),
+				signal: controller.signal,
+			});
+			clearTimeout(timeout);
 
-		// Return recommended items
-		if (res.ok) {
+			if (!res.ok) throw new Error("Recommend service failed");
+
 			const { foodIds }: { foodIds: string[] } = await res.json();
 			const seenItemsSet = new Set(seenItems);
 			const targetItems = foodIds.filter((id) => !seenItemsSet.has(id));
-			const filter = { ...body.filter, targetItems };
-
-			const items = await itemService.getItems(filter, limit);
-			return NextResponse.json(
-				{ status: "success", data: items },
-				{ status: 200 },
-			);
-		} else {
-			// Return query items
-			const filter = { ...body.filter, seenItems };
-			const items = await itemService.getItems(filter, limit);
-			return NextResponse.json(
-				{ status: "success", data: items },
-				{ status: 200 },
-			);
+			filter = { ...body.filter, targetItems };
+		} catch (err) {
+			console.error(err);
+			filter = { ...body.filter, seenItems };
 		}
+		const items = await itemService.getItems(filter, limit);
+
+		return NextResponse.json(
+			{ status: "success", data: items },
+			{ status: 200 },
+		);
 	} catch (error) {
 		console.error("Prisma Error:", error);
 		return NextResponse.json(

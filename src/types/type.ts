@@ -1,4 +1,5 @@
 import { RecordStatus } from "@/generated/enums";
+import { itemService } from "@/lib/service";
 
 export type Tag = {
 	id: string;
@@ -33,5 +34,7 @@ export type PlayData = {
 	userId: string;
 	history: PlayHistory[];
 };
+
+export type Food = Awaited<ReturnType<typeof itemService.getItems>>[number];
 
 export type PlayHistory = { itemId: string; status: RecordStatus };

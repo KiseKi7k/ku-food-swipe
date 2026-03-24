@@ -1,4 +1,4 @@
-import { Filter, PlayData } from "@/types/other";
+import { Filter, PlayData } from "@/types/type";
 import prisma from "./prisma";
 import { bytesToBase64 } from "./utils";
 
@@ -32,9 +32,6 @@ export const itemService = {
 				priceMax: true,
 			},
 			where: {
-				priceMin: filter.priceMin ? { gte: filter.priceMin } : undefined,
-				priceMax: filter.priceMax ? { lte: filter.priceMax } : undefined,
-
 				food: filter.tagIds?.length
 					? {
 							tags: {
@@ -54,6 +51,18 @@ export const itemService = {
 					: undefined,
 
 				AND: [
+					filter.priceMin !== undefined
+						? { priceMin: { gte: filter.priceMin } }
+						: {},
+					filter.priceMax !== undefined
+						? {
+								OR: [
+									{ priceMax: { lte: filter.priceMax } },
+									{ priceMax: null },
+								],
+							}
+						: {},
+
 					filter.targetItems?.length ? { id: { in: filter.targetItems } } : {},
 					filter.seenItems?.length ? { id: { notIn: filter.seenItems } } : {},
 				].filter(Boolean),
