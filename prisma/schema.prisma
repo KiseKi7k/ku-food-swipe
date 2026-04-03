@@ -78,9 +78,8 @@ model Verification {
 model UserPlay {
   id      String   @id @default(uuid())
   userId  String?  @map("user_id")
-  status  String
   records Record[]
-  users   User?    @relation(fields: [userId], references: [id]) // TODO: Remove s later
+  user    User?    @relation(fields: [userId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -109,7 +108,7 @@ model Food {
 }
 
 model Tag {
-  id    Int    @id @default(autoincrement())
+  id    String @id @default(uuid())
   name  String
   foods Food[] @relation("foodsToTags")
 
@@ -118,7 +117,7 @@ model Tag {
 }
 
 model Item {
-  id       String  @id @default(uuid())
+  id       String  @id @default(cuid())
   foodId   String  @map("food_id")
   priceMin Int
   priceMax Int?
@@ -148,11 +147,6 @@ model Location {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
-enum PlayStatus {
-  ACTIVE
-  CLOSED
 }
 
 enum RecordStatus {
