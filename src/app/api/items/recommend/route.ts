@@ -19,7 +19,7 @@ export type RecommendFoodRouteBody = {
 export async function POST(req: NextRequest) {
 	try {
 		let filter = {} as Filter;
-		const limit = 10;
+		const limit = 15;
 		const body = (await req.json()) as RecommendFoodRouteBody;
 		const seenItems = body.history.map((h) => h.itemId);
 
@@ -27,7 +27,10 @@ export async function POST(req: NextRequest) {
 			const controller = new AbortController();
 			const timeout = setTimeout(() => controller.abort(), 3000);
 
-			const res = await fetch(process.env.RECOMMEND_SERVICE_URL!, {
+			if (!process.env.RECOMMEND_SERVICE_URL)
+				throw new Error("Recommend Service Url is missing");
+
+			const res = await fetch(process.env.RECOMMEND_SERVICE_URL, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
