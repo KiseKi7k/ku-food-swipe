@@ -90,7 +90,9 @@ model Record {
   userPlayId String       @map("user_play_id")
   status     RecordStatus
   itemId     String
-  userPlays  UserPlay     @relation(fields: [userPlayId], references: [id])
+
+  item      Item     @relation(fields: [itemId], references: [id])
+  userPlays UserPlay @relation(fields: [userPlayId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -117,13 +119,14 @@ model Tag {
 }
 
 model Item {
-  id       String  @id @default(cuid())
-  foodId   String  @map("food_id")
+  id       String   @id @default(cuid())
+  foodId   String   @map("food_id")
   priceMin Int
   priceMax Int?
-  shopId   String? @map("shop_id")
-  shop     Shop?   @relation(fields: [shopId], references: [id])
-  food     Food    @relation(fields: [foodId], references: [id])
+  shopId   String?  @map("shop_id")
+  shop     Shop?    @relation(fields: [shopId], references: [id])
+  food     Food     @relation(fields: [foodId], references: [id])
+  records  Record[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

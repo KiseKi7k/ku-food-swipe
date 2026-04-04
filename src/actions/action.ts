@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { itemService } from "@/lib/service";
-import { Filter } from "@/types/type";
+import { PlayData } from "@/types/type";
 import { unstable_cache } from "next/cache";
 
 export const getFilterData = unstable_cache(
@@ -31,3 +31,8 @@ export const getFilterData = unstable_cache(
 		revalidate: 60 * 60,
 	},
 );
+
+export const createPlayRecord = async (playData: PlayData) => {
+	const userPlay = await itemService.createPlayRecord(playData);
+	return userPlay;
+};

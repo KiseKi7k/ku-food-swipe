@@ -2,13 +2,15 @@
 
 import { RecordStatus } from "@/generated/enums";
 import { AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import FinalFoodCard from "./FinalFoodCard";
 import { FoodCard } from "./FoodCard";
 import { SwipeButtons } from "./SwipeButtons";
 import { Filter, Food, PlayHistory } from "@/types/type";
 import { redirect } from "next/navigation";
+import { useSession } from "@/lib/authClient";
+import { createPlayRecord } from "@/actions/action";
 
 type ClientSwipeProps = { initialFoods: Food[]; filter: Filter };
 
@@ -19,6 +21,8 @@ const ClientSwipe = ({ initialFoods, filter }: ClientSwipeProps) => {
 
 	const [foods, setFoods] = useState<Food[]>(initialFoods);
 	const [isFetching, setIsFetching] = useState(false);
+
+	const { data } = useSession();
 
 	const handleSwipe = async (direction: "left" | "right" | "up") => {
 		const currentFood = foods[currentIndex];
@@ -69,6 +73,12 @@ const ClientSwipe = ({ initialFoods, filter }: ClientSwipeProps) => {
 			setIsFetching(false);
 		}
 	};
+
+	useEffect(() => {
+		if (gameEnded && data) {
+			createPlayRecord({ userId: data.user.id, history });
+		}
+	}, [data, gameEnded, history]);
 
 	if (gameEnded) {
 		const finalFood = foods[currentIndex];

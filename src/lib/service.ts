@@ -115,15 +115,22 @@ export const itemService = {
 	},
 
 	createPlayRecord: async (playData: PlayData) => {
-		const playRecord = await prisma.userPlay.create({
+		const userPlay = await prisma.userPlay.create({
 			data: {
 				userId: playData.userId,
 				records: {
 					create: playData.history,
 				},
 			},
+			include: {
+				records: {
+					select: {
+						itemId: true,
+						status: true,
+					},
+				},
+			},
 		});
-
-		return playRecord;
+		return userPlay;
 	},
 };
