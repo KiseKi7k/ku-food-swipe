@@ -54,11 +54,14 @@ export function Header() {
 								</DropdownMenuTrigger>
 								<DropdownMenuContent>
 									<DropdownMenuGroup>
+										<DropdownMenuItem className="hover:bg-black/10 transition-all duration-200 ease-out">
+											<Link href={`/user/${user?.id}`}>โปรไฟล์</Link>
+										</DropdownMenuItem>
 										<DropdownMenuItem
+											className="text-red-500 focus:text-red-600 hover:bg-red-500/10 transition-all duration-200 ease-out"
 											onClick={async () => {
 												await signOut();
 											}}
-											className="text-red-500 focus:text-red-600"
 										>
 											Signout
 										</DropdownMenuItem>
