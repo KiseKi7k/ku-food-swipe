@@ -1,5 +1,5 @@
 import ClientSwipe from "@/components/swipe/ClientSwipe";
-import { itemService } from "@/lib/service";
+import { itemService } from "@/service/item.service";
 import { Filter } from "@/types/type";
 
 type ToValueString<T> = {

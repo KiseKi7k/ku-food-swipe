@@ -1,4 +1,4 @@
-import { itemService } from "@/lib/service";
+import { itemService } from "@/service/item.service";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {

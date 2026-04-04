@@ -1,5 +1,5 @@
 import { RecordStatus } from "@/generated/enums";
-import { itemService } from "@/lib/service";
+import { itemService } from "@/service/item.service";
 import { Filter } from "@/types/type";
 import { NextRequest, NextResponse } from "next/server";
 

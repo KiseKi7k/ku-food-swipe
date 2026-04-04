@@ -1,7 +1,7 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { itemService } from "@/lib/service";
+import { itemService } from "@/service/item.service";
 import { PlayData } from "@/types/type";
 import { unstable_cache } from "next/cache";
 
@@ -34,5 +34,6 @@ export const getFilterData = unstable_cache(
 
 export const createPlayRecord = async (playData: PlayData) => {
 	const userPlay = await itemService.createPlayRecord(playData);
+	console.log(userPlay);
 	return userPlay;
 };

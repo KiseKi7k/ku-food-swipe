@@ -1,6 +1,6 @@
 import { RecordStatus } from "@/generated/enums";
 import { auth } from "@/lib/auth";
-import { itemService } from "@/lib/service";
+import { itemService } from "@/service/item.service";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 

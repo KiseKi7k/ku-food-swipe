@@ -1,5 +1,5 @@
 import { RecordStatus } from "@/generated/enums";
-import { itemService } from "@/lib/service";
+import { itemService } from "@/service/item.service";
 
 export type Tag = {
 	id: string;

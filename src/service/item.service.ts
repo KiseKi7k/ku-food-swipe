@@ -1,6 +1,6 @@
 import { Filter, PlayData } from "@/types/type";
-import prisma from "./prisma";
-import { bytesToBase64 } from "./utils";
+import prisma from "../lib/prisma";
+import { bytesToBase64 } from "../lib/utils";
 
 export const itemService = {
 	getItems: async (filter: Filter, limit?: number) => {

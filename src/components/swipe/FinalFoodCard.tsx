@@ -8,7 +8,7 @@ import Image from "next/image";
 import { redirect } from "next/navigation";
 
 import { useSession } from "@/lib/authClient";
-import { itemService } from "@/lib/service";
+import { itemService } from "@/service/item.service";
 
 type FinalFoodCardProps = {
 	food: Food;
