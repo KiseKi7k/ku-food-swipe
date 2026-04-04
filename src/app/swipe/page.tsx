@@ -30,7 +30,7 @@ export default async function SwipePage({
 }) {
 	const params = await searchParams;
 	const filter = parseFilter(params);
-	const foods = await itemService.getItems(filter, 10);
+	const foods = await itemService.getItems(filter, 15);
 
 	return <ClientSwipe initialFoods={foods} filter={filter} />;
 }
