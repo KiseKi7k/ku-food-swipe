@@ -20,6 +20,8 @@ model User {
 
   userPlays UserPlay[]
   role      String     @default("user")
+  votes     Vote[]
+  posts     Post[]
 
   @@unique([email])
   @@map("user")
@@ -111,7 +113,7 @@ model Food {
 
 model Tag {
   id    String @id @default(uuid())
-  name  String
+  name  String @unique
   foods Food[] @relation("foodsToTags")
 
   createdAt DateTime @default(now())
@@ -119,14 +121,18 @@ model Tag {
 }
 
 model Item {
-  id       String   @id @default(cuid())
-  foodId   String   @map("food_id")
+  id       String  @id @default(cuid())
+  foodId   String  @map("food_id")
   priceMin Int
   priceMax Int?
-  shopId   String?  @map("shop_id")
-  shop     Shop?    @relation(fields: [shopId], references: [id])
-  food     Food     @relation(fields: [foodId], references: [id])
-  records  Record[]
+  shopId   String  @map("shop_id")
+  image    Bytes?
+  postId   String?
+
+  shop    Shop     @relation(fields: [shopId], references: [id])
+  food    Food     @relation(fields: [foodId], references: [id])
+  records Record[]
+  post    Post?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -156,4 +162,35 @@ enum RecordStatus {
   LIKE
   DISLIKE
   EAT
+}
+
+model Post {
+  id        String  @id @default(cuid())
+  creatorId String
+  itemId    String  @unique
+  archived  Boolean @default(false)
+
+  creator User @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  item    Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  vote Vote[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Vote {
+  id     String  @id @default(cuid())
+  userId String
+  postId String
+  upvote Boolean
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, postId])
+  @@index([userId, postId])
 }
