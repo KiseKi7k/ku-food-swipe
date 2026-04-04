@@ -3,30 +3,11 @@
 import { Building2, CheckCircle2, HomeIcon, Store } from "lucide-react";
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
-import { Food, PlayData } from "@/types/type";
+import { Food } from "@/types/type";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 
-import { useSession } from "@/lib/authClient";
-import { itemService } from "@/service/item.service";
-
-type FinalFoodCardProps = {
-	food: Food;
-	history: PlayData["history"];
-};
-
-const FinalFoodCard = ({ food, history }: FinalFoodCardProps) => {
-	const { data } = useSession();
-
-	const handleEnd = async () => {
-		if (data?.session) {
-			// TODO: create record
-			// itemService.createPlayRecord({ userId: data.user.id, history });
-		}
-
-		redirect("/");
-	};
-
+const FinalFoodCard = ({ food }: { food: Food }) => {
 	return (
 		<div className="container mx-auto px-4 py-12 flex flex-col items-center max-w-lg">
 			<div className="text-center space-y-4 mb-8">
@@ -80,7 +61,7 @@ const FinalFoodCard = ({ food, history }: FinalFoodCardProps) => {
           </Button> */}
 				<div className="w-full flex">
 					<Button
-						onClick={handleEnd}
+						onClick={() => redirect("/")}
 						className="h-12 w-full rounded-xl gap-2 bg-green-600 hover:bg-green-700"
 					>
 						<HomeIcon className="h-4 w-4" /> กลับหน้าหลัก
