@@ -5,6 +5,7 @@ import { Filter } from "@/components/home/Filter";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export type FilterData = {
 	tags: { id: string; name: string }[];
@@ -46,7 +47,14 @@ export default function ClientHome({ filterData }: { filterData: FilterData }) {
 				<p className="text-lg text-slate-600 leading-relaxed">
 					ปัดขวาถ้าชอบ ปัดซ้ายถ้าไม่หิว ปัดบนถ้าอยากกินร้านนี้เลย!{" "}
 					<br className="hidden md:block" />
-					ให้การเลือกอาหารมื้อนี้เป็นเรื่องง่ายและสนุก
+					ให้การเลือกอาหารมื้อนี้เป็นเรื่องง่ายและสนุก <br />
+					ช่วยเพิ่มเมนูกันได้ใน{" "}
+					<Link
+						href={"/feed"}
+						className="items-center underline text-green-600 mt-1"
+					>
+						Food Vote
+					</Link>
 				</p>
 				<div className="pt-4 drop-shadow-2xl shadow-green-200">
 					<Button

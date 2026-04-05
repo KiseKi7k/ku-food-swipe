@@ -22,6 +22,7 @@ import { useSession } from "@/lib/authClient";
 import { createPost } from "@/actions/action";
 import { Spinner } from "@/components/ui/spinner";
 import { toast } from "sonner";
+import SignInBtn from "@/components/SignInBtn";
 
 export type CreateClientInput = {
 	foods: { id: string; name: string; tags: string[] }[];
@@ -127,7 +128,6 @@ export default function CreateClient({
 			setForm({ priceMin: 0, tags: [], image: null });
 		}
 	};
-
 	return (
 		<div className="min-h-screen bg-slate-50 pb-20">
 			<main className="container max-w-lg mx-auto px-4 pt-6">
@@ -139,7 +139,7 @@ export default function CreateClient({
 					ย้อนกลับ
 				</Link>
 
-				<div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
+				<div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100 relative">
 					<div className="p-6 bg-green-600 text-white">
 						<h1 className="text-2xl font-bold">เพิ่มเมนู</h1>
 						<p className="text-green-100 mt-1">เเนะนำเมนูให้ผู้อื่นโหวต</p>
@@ -150,6 +150,12 @@ export default function CreateClient({
 						onSubmit={handleSubmit}
 						className="p-6 space-y-5"
 					>
+						{!data?.user && (
+							<div className="flex flex-col gap-2 absolute z-2 inset-0 items-center justify-center bg-gray-200/90 font-semibold">
+								<p>กรุณา Log in</p>
+								<SignInBtn />
+							</div>
+						)}
 						<div className="space-y-2 relative">
 							<Label>ชื่อเมนู</Label>
 							<Input

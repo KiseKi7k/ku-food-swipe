@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 import { itemService } from "@/service/item.service";
 import { createPostBody, postService } from "@/service/post.service";
 import { PlayData } from "@/types/type";
-import { unstable_cache } from "next/cache";
+import { revalidateTag, unstable_cache } from "next/cache";
 
 export const getFilterData = unstable_cache(
 	async () => {
@@ -41,6 +41,16 @@ export const createPlayRecord = async (playData: PlayData) => {
 
 export const createPost = async (userId: string, data: createPostBody) => {
 	const post = await postService.createPost(userId, data);
-	console.log(post);
+	revalidateTag("feed-posts", "max");
 	return post;
+};
+
+export const votePost = async (
+	userId: string,
+	postId: string,
+	isUpvote: boolean,
+) => {
+	const vote = await postService.votePosts(userId, postId, isUpvote);
+	console.log(vote);
+	return vote;
 };

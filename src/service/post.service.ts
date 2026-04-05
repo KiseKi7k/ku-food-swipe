@@ -272,4 +272,17 @@ export const postService = {
 			return { success: false, message };
 		}
 	},
+	getPostVote: async (userId: string, postIds: string[]) => {
+		const votes = await prisma.vote.findMany({
+			where: {
+				userId,
+				postId: { in: postIds },
+			},
+			select: {
+				postId: true,
+				upvote: true,
+			},
+		});
+		return votes
+	},
 };
