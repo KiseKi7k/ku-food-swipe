@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
@@ -92,10 +92,6 @@ export default function CreateClient({
 	const onImageChanged = (buffer: Buffer<ArrayBuffer> | null) => {
 		setForm((p) => ({ ...p, image: buffer }));
 	};
-
-	useEffect(() => {
-		console.log(form);
-	}, [form]);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();

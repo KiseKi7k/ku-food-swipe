@@ -35,7 +35,6 @@ export const getFilterData = unstable_cache(
 
 export const createPlayRecord = async (playData: PlayData) => {
 	const userPlay = await itemService.createPlayRecord(playData);
-	console.log(userPlay);
 	return userPlay;
 };
 
@@ -51,6 +50,5 @@ export const votePost = async (
 	isUpvote: boolean,
 ) => {
 	const vote = await postService.votePosts(userId, postId, isUpvote);
-	console.log(vote);
 	return vote;
 };

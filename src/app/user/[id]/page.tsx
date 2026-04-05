@@ -17,7 +17,6 @@ export default async function UserProfilePage({
 		{ revalidate: 1000 * 60 * 30 },
 	);
 	const user = await getUser();
-	console.log(user);
 
 	return (
 		<div className="min-h-screen bg-slate-50 pb-20">

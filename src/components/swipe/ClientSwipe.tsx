@@ -84,7 +84,7 @@ const ClientSwipe = ({ initialFoods, filter }: ClientSwipeProps) => {
 		const finalFood = foods[currentIndex];
 		if (!finalFood) redirect("/");
 
-		return <FinalFoodCard food={finalFood} history={history} />;
+		return <FinalFoodCard food={finalFood} />;
 	}
 
 	return (
