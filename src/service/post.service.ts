@@ -1,24 +1,25 @@
 import prisma from "@/lib/prisma";
 import { getImageBase64 } from "@/lib/utils";
 
-type createPostBody = {
+export type createPostBody = {
 	priceMin: number;
 	priceMax?: number;
 	shopId: string;
-	image: Buffer<ArrayBuffer>;
 } & (
 	| {
 			createFood: false;
 			foodId: string;
+			image?: string;
 	  }
 	| {
 			createFood: true;
 			foodName: string;
 			tags: string[];
+			image: string;
 	  }
 );
 
-type Post = {
+export type Post = {
 	id: string;
 	upvotes: number;
 	downvotes: number;
@@ -58,10 +59,11 @@ export const postService = {
 				let food;
 
 				if (data.createFood) {
+					const imageBuffer = Buffer.from(data.image, "base64");
 					food = await tx.food.create({
 						data: {
 							name: data.foodName,
-							image: data.image,
+							image: imageBuffer,
 							tags: {
 								connectOrCreate: data.tags.map((tagName) => ({
 									where: { name: tagName },
@@ -84,12 +86,16 @@ export const postService = {
 					if (!food) throw new Error("Food not found");
 				}
 
+				const itemImageBuffer = data.image
+					? Buffer.from(data.image, "base64")
+					: undefined;
 				const item = await tx.item.create({
 					data: {
 						priceMin: data.priceMin,
 						priceMax: data.priceMax,
 						shopId: data.shopId,
 						foodId: food.id,
+						image: itemImageBuffer,
 					},
 					include: {
 						shop: {
@@ -176,6 +182,7 @@ export const postService = {
 					},
 				},
 			},
+			orderBy: { createdAt: "desc" },
 		});
 
 		const postsVote = await prisma.vote.groupBy({
@@ -201,7 +208,8 @@ export const postService = {
 			const food = p.item.food;
 
 			return {
-				...p,
+				id: p.id,
+				createdAt: p.createdAt,
 				...votes,
 				food: {
 					name: food.name,
@@ -214,6 +222,7 @@ export const postService = {
 							? getImageBase64(food.image)
 							: null,
 				},
+				creator: p.creator,
 			};
 		});
 		return formattedPost;

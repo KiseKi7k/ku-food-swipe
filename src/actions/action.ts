@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { itemService } from "@/service/item.service";
+import { createPostBody, postService } from "@/service/post.service";
 import { PlayData } from "@/types/type";
 import { unstable_cache } from "next/cache";
 
@@ -36,4 +37,10 @@ export const createPlayRecord = async (playData: PlayData) => {
 	const userPlay = await itemService.createPlayRecord(playData);
 	console.log(userPlay);
 	return userPlay;
+};
+
+export const createPost = async (userId: string, data: createPostBody) => {
+	const post = await postService.createPost(userId, data);
+	console.log(post);
+	return post;
 };

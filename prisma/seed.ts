@@ -265,6 +265,10 @@ const seedItems = async () => {
 					...(priceMax !== null && { priceMax }),
 				});
 			}
+
+			if (result.length % 50 === 0) {
+				console.log("Items: ", result.length);
+			}
 		}
 
 		await tx.item.createMany({
@@ -274,11 +278,13 @@ const seedItems = async () => {
 };
 
 const main = async () => {
-	console.log("Seeding tags...")
+	console.log("Seeding tags...");
 	await seedTag();
-	console.log("Seeding")
+	console.log("Seeding locations and shops...");
 	await seedLocationsAndShops();
+	console.log("Seeding foods...");
 	await seedFoods();
+	console.log("Seeding items...");
 	await seedItems();
 };
 
