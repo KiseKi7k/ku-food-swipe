@@ -32,9 +32,61 @@ const getPostsWithVote = async (userId: string | undefined) => {
 	}));
 };
 
+const mockPostData = [
+	{
+		id: "1",
+		downvote: 0,
+		upvotes: 6,
+		food: {
+			name: "ข้าวขาหมู",
+			tags: ["อาหารจานเดียว", "ไทย", "ไม่เผ็ด"],
+			shop: "ราเมงเส้นสด",
+			location: "บาร์ใหม่",
+			image: "/foods/rice-pork.png",
+		},
+	},
+	{
+		id: "2",
+		downvote: 0,
+		upvotes: 4,
+		food: {
+			name: "ข้าวกะเพราไก่ไข่ดาว",
+			tags: ["อาหารจานเดียว", "เผ็ด", "ไทย"],
+			shop: "เตี๋ยวเรือหน้าเฟือง",
+			location: "บาร์วิศวะ",
+			image: "/foods/chicken-kharpow.png",
+		},
+	},
+	{
+		id: "3",
+		downvote: 0,
+		upvotes: 1,
+		food: {
+			name: "ข้าวผัดไก่",
+			tags: ["อาหารจานเดียว", "ไทย", "ไม่เผ็ด"],
+			shop: "ข้าวมันไก่ช่างกล",
+			location: "บาร์วิศวะ",
+			image: "/foods/chicken-fried-rice.png",
+		},
+	},
+];
+
 export default async function FeedPage() {
 	const data = await auth.api.getSession({ headers: await headers() });
-	const posts = await getPostsWithVote(data?.user.id);
+	const postsDB = await getPostsWithVote(data?.user.id);
+	const posts = postsDB.map((p, i) => {
+		if (i > mockPostData.length - 1) return p;
+
+		const mock = mockPostData[i];
+		return {
+			...p,
+			upvotes: mock.upvotes,
+			food: {
+				...p.food,
+				image: mock.food.image,
+			},
+		};
+	});
 
 	return (
 		<div className="min-h-screen bg-slate-50 pb-20">

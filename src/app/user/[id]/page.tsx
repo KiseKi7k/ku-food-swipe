@@ -5,6 +5,52 @@ import { userService } from "@/service/user.service";
 import Image from "next/image";
 import { unstable_cache } from "next/cache";
 
+const mockUserData = {
+	createdAt: "2026-04-05T04:44:07.582Z",
+	updatedAt: "2026-04-05T04:44:07.582Z",
+	userPlays: [
+		{
+			createdAt: "2026-04-06T14:06:28.483Z",
+			food: "ข้าวคลุกกะปิ",
+			likeCount: 24,
+			dislikeCount: 36,
+		},
+		{
+			createdAt: "2026-04-05T08:20:31.650Z",
+			food: "สปาเกตตี้คาโบนาร่า",
+			likeCount: 12,
+			dislikeCount: 10,
+		},
+	],
+	likeCount: 96,
+	dislikeCount: 48,
+	playCount: 16,
+	favoriteTags: [
+		{ name: "ไทย", count: 15 },
+		{ name: "เส้น", count: 10 },
+		{ name: "ไม่เผ็ด", count: 7 },
+		{ name: "อาหารจานเดียว", count: 6 },
+		{ name: "ซุป", count: 5 },
+		{ name: "เครื่องดื่ม", count: 4 },
+		{ name: "หวาน", count: 4 },
+		{ name: "ของหวาน", count: 3 },
+		{ name: "เผ็ด", count: 3 },
+		{ name: "สุขภาพ", count: 2 },
+	],
+	favoriteFoods: [
+		{ name: "ก๋วยเตี๋ยวหมูน้ำตก", count: 3 },
+		{ name: "เต้าฮวย", count: 2 },
+		{ name: "ข้าวไข่ข้น", count: 2 },
+		{ name: "ข้าวคลุกกะปิ", count: 2 },
+		{ name: "ข้าวผัดทะเล", count: 2 },
+		{ name: "บะหมี่เกี๊ยวหมู", count: 2 },
+		{ name: "สับปะรดปั่น", count: 1 },
+		{ name: "เย็นตาโฟ", count: 1 },
+		{ name: "เอสเปรสโซ่", count: 1 },
+		{ name: "แตงโมปั่น", count: 1 },
+	],
+};
+
 export default async function UserProfilePage({
 	params,
 }: {
@@ -16,7 +62,11 @@ export default async function UserProfilePage({
 		["user", id],
 		{ revalidate: 1000 * 60 * 30 },
 	);
-	const user = await getUser();
+	const userDB = await getUser();
+	const user = {
+		...userDB,
+		...mockUserData,
+	};
 
 	return (
 		<div className="min-h-screen bg-slate-50 pb-20">
