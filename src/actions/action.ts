@@ -15,25 +15,32 @@ export const getFilterData = unstable_cache(
 					name: true,
 				},
 			});
-		
-	
-		const locations = await prisma.location.findMany({
-			select: {
-				id: true,
-				name: true,
-			},
-		});
 
-		return {
-			tags,
-			locations,
-		};
-		}catch{}
+
+			const locations = await prisma.location.findMany({
+				select: {
+					id: true,
+					name: true,
+				},
+			});
+
+			return {
+				tags,
+				locations,
+			};
+		} catch {
+			return {
+				tags: [],
+				locations: [],
+			};
+		}
+
 	},
 	["filter-data"],
 	{
 		revalidate: 60 * 60,
 	},
+
 
 );
 
