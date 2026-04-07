@@ -27,7 +27,7 @@ export type AggregateRecord = {
 export type RecordMinAggregateOutputType = {
   id: string | null
   userPlayId: string | null
-  status: string | null
+  status: $Enums.RecordStatus | null
   itemId: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -36,7 +36,7 @@ export type RecordMinAggregateOutputType = {
 export type RecordMaxAggregateOutputType = {
   id: string | null
   userPlayId: string | null
-  status: string | null
+  status: $Enums.RecordStatus | null
   itemId: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -156,7 +156,7 @@ export type RecordGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 export type RecordGroupByOutputType = {
   id: string
   userPlayId: string
-  status: string
+  status: $Enums.RecordStatus
   itemId: string
   createdAt: Date
   updatedAt: Date
@@ -186,10 +186,11 @@ export type RecordWhereInput = {
   NOT?: Prisma.RecordWhereInput | Prisma.RecordWhereInput[]
   id?: Prisma.StringFilter<"Record"> | string
   userPlayId?: Prisma.StringFilter<"Record"> | string
-  status?: Prisma.StringFilter<"Record"> | string
+  status?: Prisma.EnumRecordStatusFilter<"Record"> | $Enums.RecordStatus
   itemId?: Prisma.StringFilter<"Record"> | string
   createdAt?: Prisma.DateTimeFilter<"Record"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Record"> | Date | string
+  item?: Prisma.XOR<Prisma.ItemScalarRelationFilter, Prisma.ItemWhereInput>
   userPlays?: Prisma.XOR<Prisma.UserPlayScalarRelationFilter, Prisma.UserPlayWhereInput>
 }
 
@@ -200,6 +201,7 @@ export type RecordOrderByWithRelationInput = {
   itemId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  item?: Prisma.ItemOrderByWithRelationInput
   userPlays?: Prisma.UserPlayOrderByWithRelationInput
 }
 
@@ -209,10 +211,11 @@ export type RecordWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.RecordWhereInput[]
   NOT?: Prisma.RecordWhereInput | Prisma.RecordWhereInput[]
   userPlayId?: Prisma.StringFilter<"Record"> | string
-  status?: Prisma.StringFilter<"Record"> | string
+  status?: Prisma.EnumRecordStatusFilter<"Record"> | $Enums.RecordStatus
   itemId?: Prisma.StringFilter<"Record"> | string
   createdAt?: Prisma.DateTimeFilter<"Record"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Record"> | Date | string
+  item?: Prisma.XOR<Prisma.ItemScalarRelationFilter, Prisma.ItemWhereInput>
   userPlays?: Prisma.XOR<Prisma.UserPlayScalarRelationFilter, Prisma.UserPlayWhereInput>
 }, "id">
 
@@ -234,7 +237,7 @@ export type RecordScalarWhereWithAggregatesInput = {
   NOT?: Prisma.RecordScalarWhereWithAggregatesInput | Prisma.RecordScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Record"> | string
   userPlayId?: Prisma.StringWithAggregatesFilter<"Record"> | string
-  status?: Prisma.StringWithAggregatesFilter<"Record"> | string
+  status?: Prisma.EnumRecordStatusWithAggregatesFilter<"Record"> | $Enums.RecordStatus
   itemId?: Prisma.StringWithAggregatesFilter<"Record"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Record"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Record"> | Date | string
@@ -242,17 +245,17 @@ export type RecordScalarWhereWithAggregatesInput = {
 
 export type RecordCreateInput = {
   id?: string
-  status: string
-  itemId: string
+  status: $Enums.RecordStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  item: Prisma.ItemCreateNestedOneWithoutRecordsInput
   userPlays: Prisma.UserPlayCreateNestedOneWithoutRecordsInput
 }
 
 export type RecordUncheckedCreateInput = {
   id?: string
   userPlayId: string
-  status: string
+  status: $Enums.RecordStatus
   itemId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -260,17 +263,17 @@ export type RecordUncheckedCreateInput = {
 
 export type RecordUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  itemId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  item?: Prisma.ItemUpdateOneRequiredWithoutRecordsNestedInput
   userPlays?: Prisma.UserPlayUpdateOneRequiredWithoutRecordsNestedInput
 }
 
 export type RecordUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userPlayId?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
   itemId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -279,7 +282,7 @@ export type RecordUncheckedUpdateInput = {
 export type RecordCreateManyInput = {
   id?: string
   userPlayId: string
-  status: string
+  status: $Enums.RecordStatus
   itemId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -287,8 +290,7 @@ export type RecordCreateManyInput = {
 
 export type RecordUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  itemId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -296,7 +298,7 @@ export type RecordUpdateManyMutationInput = {
 export type RecordUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userPlayId?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
   itemId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -381,17 +383,63 @@ export type RecordUncheckedUpdateManyWithoutUserPlaysNestedInput = {
   deleteMany?: Prisma.RecordScalarWhereInput | Prisma.RecordScalarWhereInput[]
 }
 
+export type EnumRecordStatusFieldUpdateOperationsInput = {
+  set?: $Enums.RecordStatus
+}
+
+export type RecordCreateNestedManyWithoutItemInput = {
+  create?: Prisma.XOR<Prisma.RecordCreateWithoutItemInput, Prisma.RecordUncheckedCreateWithoutItemInput> | Prisma.RecordCreateWithoutItemInput[] | Prisma.RecordUncheckedCreateWithoutItemInput[]
+  connectOrCreate?: Prisma.RecordCreateOrConnectWithoutItemInput | Prisma.RecordCreateOrConnectWithoutItemInput[]
+  createMany?: Prisma.RecordCreateManyItemInputEnvelope
+  connect?: Prisma.RecordWhereUniqueInput | Prisma.RecordWhereUniqueInput[]
+}
+
+export type RecordUncheckedCreateNestedManyWithoutItemInput = {
+  create?: Prisma.XOR<Prisma.RecordCreateWithoutItemInput, Prisma.RecordUncheckedCreateWithoutItemInput> | Prisma.RecordCreateWithoutItemInput[] | Prisma.RecordUncheckedCreateWithoutItemInput[]
+  connectOrCreate?: Prisma.RecordCreateOrConnectWithoutItemInput | Prisma.RecordCreateOrConnectWithoutItemInput[]
+  createMany?: Prisma.RecordCreateManyItemInputEnvelope
+  connect?: Prisma.RecordWhereUniqueInput | Prisma.RecordWhereUniqueInput[]
+}
+
+export type RecordUpdateManyWithoutItemNestedInput = {
+  create?: Prisma.XOR<Prisma.RecordCreateWithoutItemInput, Prisma.RecordUncheckedCreateWithoutItemInput> | Prisma.RecordCreateWithoutItemInput[] | Prisma.RecordUncheckedCreateWithoutItemInput[]
+  connectOrCreate?: Prisma.RecordCreateOrConnectWithoutItemInput | Prisma.RecordCreateOrConnectWithoutItemInput[]
+  upsert?: Prisma.RecordUpsertWithWhereUniqueWithoutItemInput | Prisma.RecordUpsertWithWhereUniqueWithoutItemInput[]
+  createMany?: Prisma.RecordCreateManyItemInputEnvelope
+  set?: Prisma.RecordWhereUniqueInput | Prisma.RecordWhereUniqueInput[]
+  disconnect?: Prisma.RecordWhereUniqueInput | Prisma.RecordWhereUniqueInput[]
+  delete?: Prisma.RecordWhereUniqueInput | Prisma.RecordWhereUniqueInput[]
+  connect?: Prisma.RecordWhereUniqueInput | Prisma.RecordWhereUniqueInput[]
+  update?: Prisma.RecordUpdateWithWhereUniqueWithoutItemInput | Prisma.RecordUpdateWithWhereUniqueWithoutItemInput[]
+  updateMany?: Prisma.RecordUpdateManyWithWhereWithoutItemInput | Prisma.RecordUpdateManyWithWhereWithoutItemInput[]
+  deleteMany?: Prisma.RecordScalarWhereInput | Prisma.RecordScalarWhereInput[]
+}
+
+export type RecordUncheckedUpdateManyWithoutItemNestedInput = {
+  create?: Prisma.XOR<Prisma.RecordCreateWithoutItemInput, Prisma.RecordUncheckedCreateWithoutItemInput> | Prisma.RecordCreateWithoutItemInput[] | Prisma.RecordUncheckedCreateWithoutItemInput[]
+  connectOrCreate?: Prisma.RecordCreateOrConnectWithoutItemInput | Prisma.RecordCreateOrConnectWithoutItemInput[]
+  upsert?: Prisma.RecordUpsertWithWhereUniqueWithoutItemInput | Prisma.RecordUpsertWithWhereUniqueWithoutItemInput[]
+  createMany?: Prisma.RecordCreateManyItemInputEnvelope
+  set?: Prisma.RecordWhereUniqueInput | Prisma.RecordWhereUniqueInput[]
+  disconnect?: Prisma.RecordWhereUniqueInput | Prisma.RecordWhereUniqueInput[]
+  delete?: Prisma.RecordWhereUniqueInput | Prisma.RecordWhereUniqueInput[]
+  connect?: Prisma.RecordWhereUniqueInput | Prisma.RecordWhereUniqueInput[]
+  update?: Prisma.RecordUpdateWithWhereUniqueWithoutItemInput | Prisma.RecordUpdateWithWhereUniqueWithoutItemInput[]
+  updateMany?: Prisma.RecordUpdateManyWithWhereWithoutItemInput | Prisma.RecordUpdateManyWithWhereWithoutItemInput[]
+  deleteMany?: Prisma.RecordScalarWhereInput | Prisma.RecordScalarWhereInput[]
+}
+
 export type RecordCreateWithoutUserPlaysInput = {
   id?: string
-  status: string
-  itemId: string
+  status: $Enums.RecordStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  item: Prisma.ItemCreateNestedOneWithoutRecordsInput
 }
 
 export type RecordUncheckedCreateWithoutUserPlaysInput = {
   id?: string
-  status: string
+  status: $Enums.RecordStatus
   itemId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -429,15 +477,57 @@ export type RecordScalarWhereInput = {
   NOT?: Prisma.RecordScalarWhereInput | Prisma.RecordScalarWhereInput[]
   id?: Prisma.StringFilter<"Record"> | string
   userPlayId?: Prisma.StringFilter<"Record"> | string
-  status?: Prisma.StringFilter<"Record"> | string
+  status?: Prisma.EnumRecordStatusFilter<"Record"> | $Enums.RecordStatus
   itemId?: Prisma.StringFilter<"Record"> | string
   createdAt?: Prisma.DateTimeFilter<"Record"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Record"> | Date | string
 }
 
+export type RecordCreateWithoutItemInput = {
+  id?: string
+  status: $Enums.RecordStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userPlays: Prisma.UserPlayCreateNestedOneWithoutRecordsInput
+}
+
+export type RecordUncheckedCreateWithoutItemInput = {
+  id?: string
+  userPlayId: string
+  status: $Enums.RecordStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type RecordCreateOrConnectWithoutItemInput = {
+  where: Prisma.RecordWhereUniqueInput
+  create: Prisma.XOR<Prisma.RecordCreateWithoutItemInput, Prisma.RecordUncheckedCreateWithoutItemInput>
+}
+
+export type RecordCreateManyItemInputEnvelope = {
+  data: Prisma.RecordCreateManyItemInput | Prisma.RecordCreateManyItemInput[]
+  skipDuplicates?: boolean
+}
+
+export type RecordUpsertWithWhereUniqueWithoutItemInput = {
+  where: Prisma.RecordWhereUniqueInput
+  update: Prisma.XOR<Prisma.RecordUpdateWithoutItemInput, Prisma.RecordUncheckedUpdateWithoutItemInput>
+  create: Prisma.XOR<Prisma.RecordCreateWithoutItemInput, Prisma.RecordUncheckedCreateWithoutItemInput>
+}
+
+export type RecordUpdateWithWhereUniqueWithoutItemInput = {
+  where: Prisma.RecordWhereUniqueInput
+  data: Prisma.XOR<Prisma.RecordUpdateWithoutItemInput, Prisma.RecordUncheckedUpdateWithoutItemInput>
+}
+
+export type RecordUpdateManyWithWhereWithoutItemInput = {
+  where: Prisma.RecordScalarWhereInput
+  data: Prisma.XOR<Prisma.RecordUpdateManyMutationInput, Prisma.RecordUncheckedUpdateManyWithoutItemInput>
+}
+
 export type RecordCreateManyUserPlaysInput = {
   id?: string
-  status: string
+  status: $Enums.RecordStatus
   itemId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -445,15 +535,15 @@ export type RecordCreateManyUserPlaysInput = {
 
 export type RecordUpdateWithoutUserPlaysInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  itemId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  item?: Prisma.ItemUpdateOneRequiredWithoutRecordsNestedInput
 }
 
 export type RecordUncheckedUpdateWithoutUserPlaysInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
   itemId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -461,8 +551,40 @@ export type RecordUncheckedUpdateWithoutUserPlaysInput = {
 
 export type RecordUncheckedUpdateManyWithoutUserPlaysInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
   itemId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type RecordCreateManyItemInput = {
+  id?: string
+  userPlayId: string
+  status: $Enums.RecordStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type RecordUpdateWithoutItemInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userPlays?: Prisma.UserPlayUpdateOneRequiredWithoutRecordsNestedInput
+}
+
+export type RecordUncheckedUpdateWithoutItemInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userPlayId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type RecordUncheckedUpdateManyWithoutItemInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userPlayId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumRecordStatusFieldUpdateOperationsInput | $Enums.RecordStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -476,6 +598,7 @@ export type RecordSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   itemId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  item?: boolean | Prisma.ItemDefaultArgs<ExtArgs>
   userPlays?: boolean | Prisma.UserPlayDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["record"]>
 
@@ -486,6 +609,7 @@ export type RecordSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   itemId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  item?: boolean | Prisma.ItemDefaultArgs<ExtArgs>
   userPlays?: boolean | Prisma.UserPlayDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["record"]>
 
@@ -496,6 +620,7 @@ export type RecordSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   itemId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  item?: boolean | Prisma.ItemDefaultArgs<ExtArgs>
   userPlays?: boolean | Prisma.UserPlayDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["record"]>
 
@@ -510,24 +635,28 @@ export type RecordSelectScalar = {
 
 export type RecordOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userPlayId" | "status" | "itemId" | "createdAt" | "updatedAt", ExtArgs["result"]["record"]>
 export type RecordInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  item?: boolean | Prisma.ItemDefaultArgs<ExtArgs>
   userPlays?: boolean | Prisma.UserPlayDefaultArgs<ExtArgs>
 }
 export type RecordIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  item?: boolean | Prisma.ItemDefaultArgs<ExtArgs>
   userPlays?: boolean | Prisma.UserPlayDefaultArgs<ExtArgs>
 }
 export type RecordIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  item?: boolean | Prisma.ItemDefaultArgs<ExtArgs>
   userPlays?: boolean | Prisma.UserPlayDefaultArgs<ExtArgs>
 }
 
 export type $RecordPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Record"
   objects: {
+    item: Prisma.$ItemPayload<ExtArgs>
     userPlays: Prisma.$UserPlayPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     userPlayId: string
-    status: string
+    status: $Enums.RecordStatus
     itemId: string
     createdAt: Date
     updatedAt: Date
@@ -925,6 +1054,7 @@ readonly fields: RecordFieldRefs;
  */
 export interface Prisma__RecordClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  item<T extends Prisma.ItemDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ItemDefaultArgs<ExtArgs>>): Prisma.Prisma__ItemClient<runtime.Types.Result.GetResult<Prisma.$ItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   userPlays<T extends Prisma.UserPlayDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserPlayDefaultArgs<ExtArgs>>): Prisma.Prisma__UserPlayClient<runtime.Types.Result.GetResult<Prisma.$UserPlayPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -957,7 +1087,7 @@ export interface Prisma__RecordClient<T, Null = never, ExtArgs extends runtime.T
 export interface RecordFieldRefs {
   readonly id: Prisma.FieldRef<"Record", 'String'>
   readonly userPlayId: Prisma.FieldRef<"Record", 'String'>
-  readonly status: Prisma.FieldRef<"Record", 'String'>
+  readonly status: Prisma.FieldRef<"Record", 'RecordStatus'>
   readonly itemId: Prisma.FieldRef<"Record", 'String'>
   readonly createdAt: Prisma.FieldRef<"Record", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Record", 'DateTime'>

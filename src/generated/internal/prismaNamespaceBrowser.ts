@@ -61,7 +61,9 @@ export const ModelName = {
   Tag: 'Tag',
   Item: 'Item',
   Shop: 'Shop',
-  Location: 'Location'
+  Location: 'Location',
+  Post: 'Post',
+  Vote: 'Vote'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -142,7 +144,6 @@ export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[k
 export const UserPlayScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
-  status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -189,6 +190,8 @@ export const ItemScalarFieldEnum = {
   priceMin: 'priceMin',
   priceMax: 'priceMax',
   shopId: 'shopId',
+  image: 'image',
+  postId: 'postId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -215,6 +218,30 @@ export const LocationScalarFieldEnum = {
 } as const
 
 export type LocationScalarFieldEnum = (typeof LocationScalarFieldEnum)[keyof typeof LocationScalarFieldEnum]
+
+
+export const PostScalarFieldEnum = {
+  id: 'id',
+  creatorId: 'creatorId',
+  itemId: 'itemId',
+  archived: 'archived',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PostScalarFieldEnum = (typeof PostScalarFieldEnum)[keyof typeof PostScalarFieldEnum]
+
+
+export const VoteScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  postId: 'postId',
+  upvote: 'upvote',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VoteScalarFieldEnum = (typeof VoteScalarFieldEnum)[keyof typeof VoteScalarFieldEnum]
 
 
 export const SortOrder = {

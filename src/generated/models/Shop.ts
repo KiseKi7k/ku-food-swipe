@@ -290,9 +290,9 @@ export type ShopUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type ShopNullableScalarRelationFilter = {
-  is?: Prisma.ShopWhereInput | null
-  isNot?: Prisma.ShopWhereInput | null
+export type ShopScalarRelationFilter = {
+  is?: Prisma.ShopWhereInput
+  isNot?: Prisma.ShopWhereInput
 }
 
 export type ShopCountOrderByAggregateInput = {
@@ -335,12 +335,10 @@ export type ShopCreateNestedOneWithoutItemsInput = {
   connect?: Prisma.ShopWhereUniqueInput
 }
 
-export type ShopUpdateOneWithoutItemsNestedInput = {
+export type ShopUpdateOneRequiredWithoutItemsNestedInput = {
   create?: Prisma.XOR<Prisma.ShopCreateWithoutItemsInput, Prisma.ShopUncheckedCreateWithoutItemsInput>
   connectOrCreate?: Prisma.ShopCreateOrConnectWithoutItemsInput
   upsert?: Prisma.ShopUpsertWithoutItemsInput
-  disconnect?: Prisma.ShopWhereInput | boolean
-  delete?: Prisma.ShopWhereInput | boolean
   connect?: Prisma.ShopWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.ShopUpdateToOneWithWhereWithoutItemsInput, Prisma.ShopUpdateWithoutItemsInput>, Prisma.ShopUncheckedUpdateWithoutItemsInput>
 }

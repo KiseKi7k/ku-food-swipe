@@ -187,14 +187,14 @@ export type TagOrderByWithRelationInput = {
 
 export type TagWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  name?: string
   AND?: Prisma.TagWhereInput | Prisma.TagWhereInput[]
   OR?: Prisma.TagWhereInput[]
   NOT?: Prisma.TagWhereInput | Prisma.TagWhereInput[]
-  name?: Prisma.StringFilter<"Tag"> | string
   createdAt?: Prisma.DateTimeFilter<"Tag"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Tag"> | Date | string
   foods?: Prisma.FoodListRelationFilter
-}, "id">
+}, "id" | "name">
 
 export type TagOrderByWithAggregationInput = {
   id?: Prisma.SortOrder

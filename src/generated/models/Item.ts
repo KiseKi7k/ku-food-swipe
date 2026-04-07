@@ -42,6 +42,8 @@ export type ItemMinAggregateOutputType = {
   priceMin: number | null
   priceMax: number | null
   shopId: string | null
+  image: runtime.Bytes | null
+  postId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -52,6 +54,8 @@ export type ItemMaxAggregateOutputType = {
   priceMin: number | null
   priceMax: number | null
   shopId: string | null
+  image: runtime.Bytes | null
+  postId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -62,6 +66,8 @@ export type ItemCountAggregateOutputType = {
   priceMin: number
   priceMax: number
   shopId: number
+  image: number
+  postId: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -84,6 +90,8 @@ export type ItemMinAggregateInputType = {
   priceMin?: true
   priceMax?: true
   shopId?: true
+  image?: true
+  postId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -94,6 +102,8 @@ export type ItemMaxAggregateInputType = {
   priceMin?: true
   priceMax?: true
   shopId?: true
+  image?: true
+  postId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -104,6 +114,8 @@ export type ItemCountAggregateInputType = {
   priceMin?: true
   priceMax?: true
   shopId?: true
+  image?: true
+  postId?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -200,7 +212,9 @@ export type ItemGroupByOutputType = {
   foodId: string
   priceMin: number
   priceMax: number | null
-  shopId: string | null
+  shopId: string
+  image: runtime.Bytes | null
+  postId: string | null
   createdAt: Date
   updatedAt: Date
   _count: ItemCountAggregateOutputType | null
@@ -233,11 +247,15 @@ export type ItemWhereInput = {
   foodId?: Prisma.StringFilter<"Item"> | string
   priceMin?: Prisma.IntFilter<"Item"> | number
   priceMax?: Prisma.IntNullableFilter<"Item"> | number | null
-  shopId?: Prisma.StringNullableFilter<"Item"> | string | null
+  shopId?: Prisma.StringFilter<"Item"> | string
+  image?: Prisma.BytesNullableFilter<"Item"> | runtime.Bytes | null
+  postId?: Prisma.StringNullableFilter<"Item"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Item"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Item"> | Date | string
-  shop?: Prisma.XOR<Prisma.ShopNullableScalarRelationFilter, Prisma.ShopWhereInput> | null
+  shop?: Prisma.XOR<Prisma.ShopScalarRelationFilter, Prisma.ShopWhereInput>
   food?: Prisma.XOR<Prisma.FoodScalarRelationFilter, Prisma.FoodWhereInput>
+  records?: Prisma.RecordListRelationFilter
+  post?: Prisma.XOR<Prisma.PostNullableScalarRelationFilter, Prisma.PostWhereInput> | null
 }
 
 export type ItemOrderByWithRelationInput = {
@@ -245,11 +263,15 @@ export type ItemOrderByWithRelationInput = {
   foodId?: Prisma.SortOrder
   priceMin?: Prisma.SortOrder
   priceMax?: Prisma.SortOrderInput | Prisma.SortOrder
-  shopId?: Prisma.SortOrderInput | Prisma.SortOrder
+  shopId?: Prisma.SortOrder
+  image?: Prisma.SortOrderInput | Prisma.SortOrder
+  postId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   shop?: Prisma.ShopOrderByWithRelationInput
   food?: Prisma.FoodOrderByWithRelationInput
+  records?: Prisma.RecordOrderByRelationAggregateInput
+  post?: Prisma.PostOrderByWithRelationInput
 }
 
 export type ItemWhereUniqueInput = Prisma.AtLeast<{
@@ -260,11 +282,15 @@ export type ItemWhereUniqueInput = Prisma.AtLeast<{
   foodId?: Prisma.StringFilter<"Item"> | string
   priceMin?: Prisma.IntFilter<"Item"> | number
   priceMax?: Prisma.IntNullableFilter<"Item"> | number | null
-  shopId?: Prisma.StringNullableFilter<"Item"> | string | null
+  shopId?: Prisma.StringFilter<"Item"> | string
+  image?: Prisma.BytesNullableFilter<"Item"> | runtime.Bytes | null
+  postId?: Prisma.StringNullableFilter<"Item"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Item"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Item"> | Date | string
-  shop?: Prisma.XOR<Prisma.ShopNullableScalarRelationFilter, Prisma.ShopWhereInput> | null
+  shop?: Prisma.XOR<Prisma.ShopScalarRelationFilter, Prisma.ShopWhereInput>
   food?: Prisma.XOR<Prisma.FoodScalarRelationFilter, Prisma.FoodWhereInput>
+  records?: Prisma.RecordListRelationFilter
+  post?: Prisma.XOR<Prisma.PostNullableScalarRelationFilter, Prisma.PostWhereInput> | null
 }, "id">
 
 export type ItemOrderByWithAggregationInput = {
@@ -272,7 +298,9 @@ export type ItemOrderByWithAggregationInput = {
   foodId?: Prisma.SortOrder
   priceMin?: Prisma.SortOrder
   priceMax?: Prisma.SortOrderInput | Prisma.SortOrder
-  shopId?: Prisma.SortOrderInput | Prisma.SortOrder
+  shopId?: Prisma.SortOrder
+  image?: Prisma.SortOrderInput | Prisma.SortOrder
+  postId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.ItemCountOrderByAggregateInput
@@ -290,7 +318,9 @@ export type ItemScalarWhereWithAggregatesInput = {
   foodId?: Prisma.StringWithAggregatesFilter<"Item"> | string
   priceMin?: Prisma.IntWithAggregatesFilter<"Item"> | number
   priceMax?: Prisma.IntNullableWithAggregatesFilter<"Item"> | number | null
-  shopId?: Prisma.StringNullableWithAggregatesFilter<"Item"> | string | null
+  shopId?: Prisma.StringWithAggregatesFilter<"Item"> | string
+  image?: Prisma.BytesNullableWithAggregatesFilter<"Item"> | runtime.Bytes | null
+  postId?: Prisma.StringNullableWithAggregatesFilter<"Item"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Item"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Item"> | Date | string
 }
@@ -299,10 +329,14 @@ export type ItemCreateInput = {
   id?: string
   priceMin: number
   priceMax?: number | null
+  image?: runtime.Bytes | null
+  postId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  shop?: Prisma.ShopCreateNestedOneWithoutItemsInput
+  shop: Prisma.ShopCreateNestedOneWithoutItemsInput
   food: Prisma.FoodCreateNestedOneWithoutItemsInput
+  records?: Prisma.RecordCreateNestedManyWithoutItemInput
+  post?: Prisma.PostCreateNestedOneWithoutItemInput
 }
 
 export type ItemUncheckedCreateInput = {
@@ -310,19 +344,27 @@ export type ItemUncheckedCreateInput = {
   foodId: string
   priceMin: number
   priceMax?: number | null
-  shopId?: string | null
+  shopId: string
+  image?: runtime.Bytes | null
+  postId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  records?: Prisma.RecordUncheckedCreateNestedManyWithoutItemInput
+  post?: Prisma.PostUncheckedCreateNestedOneWithoutItemInput
 }
 
 export type ItemUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   priceMin?: Prisma.IntFieldUpdateOperationsInput | number
   priceMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  image?: Prisma.NullableBytesFieldUpdateOperationsInput | runtime.Bytes | null
+  postId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  shop?: Prisma.ShopUpdateOneWithoutItemsNestedInput
+  shop?: Prisma.ShopUpdateOneRequiredWithoutItemsNestedInput
   food?: Prisma.FoodUpdateOneRequiredWithoutItemsNestedInput
+  records?: Prisma.RecordUpdateManyWithoutItemNestedInput
+  post?: Prisma.PostUpdateOneWithoutItemNestedInput
 }
 
 export type ItemUncheckedUpdateInput = {
@@ -330,9 +372,13 @@ export type ItemUncheckedUpdateInput = {
   foodId?: Prisma.StringFieldUpdateOperationsInput | string
   priceMin?: Prisma.IntFieldUpdateOperationsInput | number
   priceMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  shopId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shopId?: Prisma.StringFieldUpdateOperationsInput | string
+  image?: Prisma.NullableBytesFieldUpdateOperationsInput | runtime.Bytes | null
+  postId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  records?: Prisma.RecordUncheckedUpdateManyWithoutItemNestedInput
+  post?: Prisma.PostUncheckedUpdateOneWithoutItemNestedInput
 }
 
 export type ItemCreateManyInput = {
@@ -340,7 +386,9 @@ export type ItemCreateManyInput = {
   foodId: string
   priceMin: number
   priceMax?: number | null
-  shopId?: string | null
+  shopId: string
+  image?: runtime.Bytes | null
+  postId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -349,6 +397,8 @@ export type ItemUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   priceMin?: Prisma.IntFieldUpdateOperationsInput | number
   priceMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  image?: Prisma.NullableBytesFieldUpdateOperationsInput | runtime.Bytes | null
+  postId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -358,9 +408,16 @@ export type ItemUncheckedUpdateManyInput = {
   foodId?: Prisma.StringFieldUpdateOperationsInput | string
   priceMin?: Prisma.IntFieldUpdateOperationsInput | number
   priceMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  shopId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shopId?: Prisma.StringFieldUpdateOperationsInput | string
+  image?: Prisma.NullableBytesFieldUpdateOperationsInput | runtime.Bytes | null
+  postId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type ItemScalarRelationFilter = {
+  is?: Prisma.ItemWhereInput
+  isNot?: Prisma.ItemWhereInput
 }
 
 export type ItemListRelationFilter = {
@@ -379,6 +436,8 @@ export type ItemCountOrderByAggregateInput = {
   priceMin?: Prisma.SortOrder
   priceMax?: Prisma.SortOrder
   shopId?: Prisma.SortOrder
+  image?: Prisma.SortOrder
+  postId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -394,6 +453,8 @@ export type ItemMaxOrderByAggregateInput = {
   priceMin?: Prisma.SortOrder
   priceMax?: Prisma.SortOrder
   shopId?: Prisma.SortOrder
+  image?: Prisma.SortOrder
+  postId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -404,6 +465,8 @@ export type ItemMinOrderByAggregateInput = {
   priceMin?: Prisma.SortOrder
   priceMax?: Prisma.SortOrder
   shopId?: Prisma.SortOrder
+  image?: Prisma.SortOrder
+  postId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -411,6 +474,20 @@ export type ItemMinOrderByAggregateInput = {
 export type ItemSumOrderByAggregateInput = {
   priceMin?: Prisma.SortOrder
   priceMax?: Prisma.SortOrder
+}
+
+export type ItemCreateNestedOneWithoutRecordsInput = {
+  create?: Prisma.XOR<Prisma.ItemCreateWithoutRecordsInput, Prisma.ItemUncheckedCreateWithoutRecordsInput>
+  connectOrCreate?: Prisma.ItemCreateOrConnectWithoutRecordsInput
+  connect?: Prisma.ItemWhereUniqueInput
+}
+
+export type ItemUpdateOneRequiredWithoutRecordsNestedInput = {
+  create?: Prisma.XOR<Prisma.ItemCreateWithoutRecordsInput, Prisma.ItemUncheckedCreateWithoutRecordsInput>
+  connectOrCreate?: Prisma.ItemCreateOrConnectWithoutRecordsInput
+  upsert?: Prisma.ItemUpsertWithoutRecordsInput
+  connect?: Prisma.ItemWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ItemUpdateToOneWithWhereWithoutRecordsInput, Prisma.ItemUpdateWithoutRecordsInput>, Prisma.ItemUncheckedUpdateWithoutRecordsInput>
 }
 
 export type ItemCreateNestedManyWithoutFoodInput = {
@@ -513,22 +590,112 @@ export type ItemUncheckedUpdateManyWithoutShopNestedInput = {
   deleteMany?: Prisma.ItemScalarWhereInput | Prisma.ItemScalarWhereInput[]
 }
 
+export type ItemCreateNestedOneWithoutPostInput = {
+  create?: Prisma.XOR<Prisma.ItemCreateWithoutPostInput, Prisma.ItemUncheckedCreateWithoutPostInput>
+  connectOrCreate?: Prisma.ItemCreateOrConnectWithoutPostInput
+  connect?: Prisma.ItemWhereUniqueInput
+}
+
+export type ItemUpdateOneRequiredWithoutPostNestedInput = {
+  create?: Prisma.XOR<Prisma.ItemCreateWithoutPostInput, Prisma.ItemUncheckedCreateWithoutPostInput>
+  connectOrCreate?: Prisma.ItemCreateOrConnectWithoutPostInput
+  upsert?: Prisma.ItemUpsertWithoutPostInput
+  connect?: Prisma.ItemWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ItemUpdateToOneWithWhereWithoutPostInput, Prisma.ItemUpdateWithoutPostInput>, Prisma.ItemUncheckedUpdateWithoutPostInput>
+}
+
+export type ItemCreateWithoutRecordsInput = {
+  id?: string
+  priceMin: number
+  priceMax?: number | null
+  image?: runtime.Bytes | null
+  postId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  shop: Prisma.ShopCreateNestedOneWithoutItemsInput
+  food: Prisma.FoodCreateNestedOneWithoutItemsInput
+  post?: Prisma.PostCreateNestedOneWithoutItemInput
+}
+
+export type ItemUncheckedCreateWithoutRecordsInput = {
+  id?: string
+  foodId: string
+  priceMin: number
+  priceMax?: number | null
+  shopId: string
+  image?: runtime.Bytes | null
+  postId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  post?: Prisma.PostUncheckedCreateNestedOneWithoutItemInput
+}
+
+export type ItemCreateOrConnectWithoutRecordsInput = {
+  where: Prisma.ItemWhereUniqueInput
+  create: Prisma.XOR<Prisma.ItemCreateWithoutRecordsInput, Prisma.ItemUncheckedCreateWithoutRecordsInput>
+}
+
+export type ItemUpsertWithoutRecordsInput = {
+  update: Prisma.XOR<Prisma.ItemUpdateWithoutRecordsInput, Prisma.ItemUncheckedUpdateWithoutRecordsInput>
+  create: Prisma.XOR<Prisma.ItemCreateWithoutRecordsInput, Prisma.ItemUncheckedCreateWithoutRecordsInput>
+  where?: Prisma.ItemWhereInput
+}
+
+export type ItemUpdateToOneWithWhereWithoutRecordsInput = {
+  where?: Prisma.ItemWhereInput
+  data: Prisma.XOR<Prisma.ItemUpdateWithoutRecordsInput, Prisma.ItemUncheckedUpdateWithoutRecordsInput>
+}
+
+export type ItemUpdateWithoutRecordsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  priceMin?: Prisma.IntFieldUpdateOperationsInput | number
+  priceMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  image?: Prisma.NullableBytesFieldUpdateOperationsInput | runtime.Bytes | null
+  postId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  shop?: Prisma.ShopUpdateOneRequiredWithoutItemsNestedInput
+  food?: Prisma.FoodUpdateOneRequiredWithoutItemsNestedInput
+  post?: Prisma.PostUpdateOneWithoutItemNestedInput
+}
+
+export type ItemUncheckedUpdateWithoutRecordsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  foodId?: Prisma.StringFieldUpdateOperationsInput | string
+  priceMin?: Prisma.IntFieldUpdateOperationsInput | number
+  priceMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  shopId?: Prisma.StringFieldUpdateOperationsInput | string
+  image?: Prisma.NullableBytesFieldUpdateOperationsInput | runtime.Bytes | null
+  postId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  post?: Prisma.PostUncheckedUpdateOneWithoutItemNestedInput
+}
+
 export type ItemCreateWithoutFoodInput = {
   id?: string
   priceMin: number
   priceMax?: number | null
+  image?: runtime.Bytes | null
+  postId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  shop?: Prisma.ShopCreateNestedOneWithoutItemsInput
+  shop: Prisma.ShopCreateNestedOneWithoutItemsInput
+  records?: Prisma.RecordCreateNestedManyWithoutItemInput
+  post?: Prisma.PostCreateNestedOneWithoutItemInput
 }
 
 export type ItemUncheckedCreateWithoutFoodInput = {
   id?: string
   priceMin: number
   priceMax?: number | null
-  shopId?: string | null
+  shopId: string
+  image?: runtime.Bytes | null
+  postId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  records?: Prisma.RecordUncheckedCreateNestedManyWithoutItemInput
+  post?: Prisma.PostUncheckedCreateNestedOneWithoutItemInput
 }
 
 export type ItemCreateOrConnectWithoutFoodInput = {
@@ -565,7 +732,9 @@ export type ItemScalarWhereInput = {
   foodId?: Prisma.StringFilter<"Item"> | string
   priceMin?: Prisma.IntFilter<"Item"> | number
   priceMax?: Prisma.IntNullableFilter<"Item"> | number | null
-  shopId?: Prisma.StringNullableFilter<"Item"> | string | null
+  shopId?: Prisma.StringFilter<"Item"> | string
+  image?: Prisma.BytesNullableFilter<"Item"> | runtime.Bytes | null
+  postId?: Prisma.StringNullableFilter<"Item"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Item"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Item"> | Date | string
 }
@@ -574,9 +743,13 @@ export type ItemCreateWithoutShopInput = {
   id?: string
   priceMin: number
   priceMax?: number | null
+  image?: runtime.Bytes | null
+  postId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   food: Prisma.FoodCreateNestedOneWithoutItemsInput
+  records?: Prisma.RecordCreateNestedManyWithoutItemInput
+  post?: Prisma.PostCreateNestedOneWithoutItemInput
 }
 
 export type ItemUncheckedCreateWithoutShopInput = {
@@ -584,8 +757,12 @@ export type ItemUncheckedCreateWithoutShopInput = {
   foodId: string
   priceMin: number
   priceMax?: number | null
+  image?: runtime.Bytes | null
+  postId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  records?: Prisma.RecordUncheckedCreateNestedManyWithoutItemInput
+  post?: Prisma.PostUncheckedCreateNestedOneWithoutItemInput
 }
 
 export type ItemCreateOrConnectWithoutShopInput = {
@@ -614,11 +791,81 @@ export type ItemUpdateManyWithWhereWithoutShopInput = {
   data: Prisma.XOR<Prisma.ItemUpdateManyMutationInput, Prisma.ItemUncheckedUpdateManyWithoutShopInput>
 }
 
+export type ItemCreateWithoutPostInput = {
+  id?: string
+  priceMin: number
+  priceMax?: number | null
+  image?: runtime.Bytes | null
+  postId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  shop: Prisma.ShopCreateNestedOneWithoutItemsInput
+  food: Prisma.FoodCreateNestedOneWithoutItemsInput
+  records?: Prisma.RecordCreateNestedManyWithoutItemInput
+}
+
+export type ItemUncheckedCreateWithoutPostInput = {
+  id?: string
+  foodId: string
+  priceMin: number
+  priceMax?: number | null
+  shopId: string
+  image?: runtime.Bytes | null
+  postId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  records?: Prisma.RecordUncheckedCreateNestedManyWithoutItemInput
+}
+
+export type ItemCreateOrConnectWithoutPostInput = {
+  where: Prisma.ItemWhereUniqueInput
+  create: Prisma.XOR<Prisma.ItemCreateWithoutPostInput, Prisma.ItemUncheckedCreateWithoutPostInput>
+}
+
+export type ItemUpsertWithoutPostInput = {
+  update: Prisma.XOR<Prisma.ItemUpdateWithoutPostInput, Prisma.ItemUncheckedUpdateWithoutPostInput>
+  create: Prisma.XOR<Prisma.ItemCreateWithoutPostInput, Prisma.ItemUncheckedCreateWithoutPostInput>
+  where?: Prisma.ItemWhereInput
+}
+
+export type ItemUpdateToOneWithWhereWithoutPostInput = {
+  where?: Prisma.ItemWhereInput
+  data: Prisma.XOR<Prisma.ItemUpdateWithoutPostInput, Prisma.ItemUncheckedUpdateWithoutPostInput>
+}
+
+export type ItemUpdateWithoutPostInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  priceMin?: Prisma.IntFieldUpdateOperationsInput | number
+  priceMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  image?: Prisma.NullableBytesFieldUpdateOperationsInput | runtime.Bytes | null
+  postId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  shop?: Prisma.ShopUpdateOneRequiredWithoutItemsNestedInput
+  food?: Prisma.FoodUpdateOneRequiredWithoutItemsNestedInput
+  records?: Prisma.RecordUpdateManyWithoutItemNestedInput
+}
+
+export type ItemUncheckedUpdateWithoutPostInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  foodId?: Prisma.StringFieldUpdateOperationsInput | string
+  priceMin?: Prisma.IntFieldUpdateOperationsInput | number
+  priceMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  shopId?: Prisma.StringFieldUpdateOperationsInput | string
+  image?: Prisma.NullableBytesFieldUpdateOperationsInput | runtime.Bytes | null
+  postId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  records?: Prisma.RecordUncheckedUpdateManyWithoutItemNestedInput
+}
+
 export type ItemCreateManyFoodInput = {
   id?: string
   priceMin: number
   priceMax?: number | null
-  shopId?: string | null
+  shopId: string
+  image?: runtime.Bytes | null
+  postId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -627,25 +874,35 @@ export type ItemUpdateWithoutFoodInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   priceMin?: Prisma.IntFieldUpdateOperationsInput | number
   priceMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  image?: Prisma.NullableBytesFieldUpdateOperationsInput | runtime.Bytes | null
+  postId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  shop?: Prisma.ShopUpdateOneWithoutItemsNestedInput
+  shop?: Prisma.ShopUpdateOneRequiredWithoutItemsNestedInput
+  records?: Prisma.RecordUpdateManyWithoutItemNestedInput
+  post?: Prisma.PostUpdateOneWithoutItemNestedInput
 }
 
 export type ItemUncheckedUpdateWithoutFoodInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   priceMin?: Prisma.IntFieldUpdateOperationsInput | number
   priceMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  shopId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shopId?: Prisma.StringFieldUpdateOperationsInput | string
+  image?: Prisma.NullableBytesFieldUpdateOperationsInput | runtime.Bytes | null
+  postId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  records?: Prisma.RecordUncheckedUpdateManyWithoutItemNestedInput
+  post?: Prisma.PostUncheckedUpdateOneWithoutItemNestedInput
 }
 
 export type ItemUncheckedUpdateManyWithoutFoodInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   priceMin?: Prisma.IntFieldUpdateOperationsInput | number
   priceMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  shopId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shopId?: Prisma.StringFieldUpdateOperationsInput | string
+  image?: Prisma.NullableBytesFieldUpdateOperationsInput | runtime.Bytes | null
+  postId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -655,6 +912,8 @@ export type ItemCreateManyShopInput = {
   foodId: string
   priceMin: number
   priceMax?: number | null
+  image?: runtime.Bytes | null
+  postId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -663,9 +922,13 @@ export type ItemUpdateWithoutShopInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   priceMin?: Prisma.IntFieldUpdateOperationsInput | number
   priceMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  image?: Prisma.NullableBytesFieldUpdateOperationsInput | runtime.Bytes | null
+  postId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   food?: Prisma.FoodUpdateOneRequiredWithoutItemsNestedInput
+  records?: Prisma.RecordUpdateManyWithoutItemNestedInput
+  post?: Prisma.PostUpdateOneWithoutItemNestedInput
 }
 
 export type ItemUncheckedUpdateWithoutShopInput = {
@@ -673,8 +936,12 @@ export type ItemUncheckedUpdateWithoutShopInput = {
   foodId?: Prisma.StringFieldUpdateOperationsInput | string
   priceMin?: Prisma.IntFieldUpdateOperationsInput | number
   priceMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  image?: Prisma.NullableBytesFieldUpdateOperationsInput | runtime.Bytes | null
+  postId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  records?: Prisma.RecordUncheckedUpdateManyWithoutItemNestedInput
+  post?: Prisma.PostUncheckedUpdateOneWithoutItemNestedInput
 }
 
 export type ItemUncheckedUpdateManyWithoutShopInput = {
@@ -682,10 +949,41 @@ export type ItemUncheckedUpdateManyWithoutShopInput = {
   foodId?: Prisma.StringFieldUpdateOperationsInput | string
   priceMin?: Prisma.IntFieldUpdateOperationsInput | number
   priceMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  image?: Prisma.NullableBytesFieldUpdateOperationsInput | runtime.Bytes | null
+  postId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+
+/**
+ * Count Type ItemCountOutputType
+ */
+
+export type ItemCountOutputType = {
+  records: number
+}
+
+export type ItemCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  records?: boolean | ItemCountOutputTypeCountRecordsArgs
+}
+
+/**
+ * ItemCountOutputType without action
+ */
+export type ItemCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ItemCountOutputType
+   */
+  select?: Prisma.ItemCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * ItemCountOutputType without action
+ */
+export type ItemCountOutputTypeCountRecordsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.RecordWhereInput
+}
 
 
 export type ItemSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -694,10 +992,15 @@ export type ItemSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   priceMin?: boolean
   priceMax?: boolean
   shopId?: boolean
+  image?: boolean
+  postId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  shop?: boolean | Prisma.Item$shopArgs<ExtArgs>
+  shop?: boolean | Prisma.ShopDefaultArgs<ExtArgs>
   food?: boolean | Prisma.FoodDefaultArgs<ExtArgs>
+  records?: boolean | Prisma.Item$recordsArgs<ExtArgs>
+  post?: boolean | Prisma.Item$postArgs<ExtArgs>
+  _count?: boolean | Prisma.ItemCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["item"]>
 
 export type ItemSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -706,9 +1009,11 @@ export type ItemSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   priceMin?: boolean
   priceMax?: boolean
   shopId?: boolean
+  image?: boolean
+  postId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  shop?: boolean | Prisma.Item$shopArgs<ExtArgs>
+  shop?: boolean | Prisma.ShopDefaultArgs<ExtArgs>
   food?: boolean | Prisma.FoodDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["item"]>
 
@@ -718,9 +1023,11 @@ export type ItemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   priceMin?: boolean
   priceMax?: boolean
   shopId?: boolean
+  image?: boolean
+  postId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  shop?: boolean | Prisma.Item$shopArgs<ExtArgs>
+  shop?: boolean | Prisma.ShopDefaultArgs<ExtArgs>
   food?: boolean | Prisma.FoodDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["item"]>
 
@@ -730,36 +1037,45 @@ export type ItemSelectScalar = {
   priceMin?: boolean
   priceMax?: boolean
   shopId?: boolean
+  image?: boolean
+  postId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "foodId" | "priceMin" | "priceMax" | "shopId" | "createdAt" | "updatedAt", ExtArgs["result"]["item"]>
+export type ItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "foodId" | "priceMin" | "priceMax" | "shopId" | "image" | "postId" | "createdAt" | "updatedAt", ExtArgs["result"]["item"]>
 export type ItemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  shop?: boolean | Prisma.Item$shopArgs<ExtArgs>
+  shop?: boolean | Prisma.ShopDefaultArgs<ExtArgs>
   food?: boolean | Prisma.FoodDefaultArgs<ExtArgs>
+  records?: boolean | Prisma.Item$recordsArgs<ExtArgs>
+  post?: boolean | Prisma.Item$postArgs<ExtArgs>
+  _count?: boolean | Prisma.ItemCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ItemIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  shop?: boolean | Prisma.Item$shopArgs<ExtArgs>
+  shop?: boolean | Prisma.ShopDefaultArgs<ExtArgs>
   food?: boolean | Prisma.FoodDefaultArgs<ExtArgs>
 }
 export type ItemIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  shop?: boolean | Prisma.Item$shopArgs<ExtArgs>
+  shop?: boolean | Prisma.ShopDefaultArgs<ExtArgs>
   food?: boolean | Prisma.FoodDefaultArgs<ExtArgs>
 }
 
 export type $ItemPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Item"
   objects: {
-    shop: Prisma.$ShopPayload<ExtArgs> | null
+    shop: Prisma.$ShopPayload<ExtArgs>
     food: Prisma.$FoodPayload<ExtArgs>
+    records: Prisma.$RecordPayload<ExtArgs>[]
+    post: Prisma.$PostPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     foodId: string
     priceMin: number
     priceMax: number | null
-    shopId: string | null
+    shopId: string
+    image: runtime.Bytes | null
+    postId: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["item"]>
@@ -1156,8 +1472,10 @@ readonly fields: ItemFieldRefs;
  */
 export interface Prisma__ItemClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  shop<T extends Prisma.Item$shopArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Item$shopArgs<ExtArgs>>): Prisma.Prisma__ShopClient<runtime.Types.Result.GetResult<Prisma.$ShopPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  shop<T extends Prisma.ShopDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ShopDefaultArgs<ExtArgs>>): Prisma.Prisma__ShopClient<runtime.Types.Result.GetResult<Prisma.$ShopPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   food<T extends Prisma.FoodDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FoodDefaultArgs<ExtArgs>>): Prisma.Prisma__FoodClient<runtime.Types.Result.GetResult<Prisma.$FoodPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  records<T extends Prisma.Item$recordsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Item$recordsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  post<T extends Prisma.Item$postArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Item$postArgs<ExtArgs>>): Prisma.Prisma__PostClient<runtime.Types.Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1192,6 +1510,8 @@ export interface ItemFieldRefs {
   readonly priceMin: Prisma.FieldRef<"Item", 'Int'>
   readonly priceMax: Prisma.FieldRef<"Item", 'Int'>
   readonly shopId: Prisma.FieldRef<"Item", 'String'>
+  readonly image: Prisma.FieldRef<"Item", 'Bytes'>
+  readonly postId: Prisma.FieldRef<"Item", 'String'>
   readonly createdAt: Prisma.FieldRef<"Item", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Item", 'DateTime'>
 }
@@ -1590,22 +1910,46 @@ export type ItemDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
- * Item.shop
+ * Item.records
  */
-export type Item$shopArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Item$recordsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Shop
+   * Select specific fields to fetch from the Record
    */
-  select?: Prisma.ShopSelect<ExtArgs> | null
+  select?: Prisma.RecordSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Shop
+   * Omit specific fields from the Record
    */
-  omit?: Prisma.ShopOmit<ExtArgs> | null
+  omit?: Prisma.RecordOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ShopInclude<ExtArgs> | null
-  where?: Prisma.ShopWhereInput
+  include?: Prisma.RecordInclude<ExtArgs> | null
+  where?: Prisma.RecordWhereInput
+  orderBy?: Prisma.RecordOrderByWithRelationInput | Prisma.RecordOrderByWithRelationInput[]
+  cursor?: Prisma.RecordWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.RecordScalarFieldEnum | Prisma.RecordScalarFieldEnum[]
+}
+
+/**
+ * Item.post
+ */
+export type Item$postArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Post
+   */
+  select?: Prisma.PostSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Post
+   */
+  omit?: Prisma.PostOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PostInclude<ExtArgs> | null
+  where?: Prisma.PostWhereInput
 }
 
 /**

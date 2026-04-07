@@ -94,3 +94,13 @@ export type Shop = Prisma.ShopModel
  * 
  */
 export type Location = Prisma.LocationModel
+/**
+ * Model Post
+ * 
+ */
+export type Post = Prisma.PostModel
+/**
+ * Model Vote
+ * 
+ */
+export type Vote = Prisma.VoteModel

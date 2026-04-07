@@ -9,7 +9,10 @@
 * 🟢 You can import this file directly.
 */
 
+export const RecordStatus = {
+  LIKE: 'LIKE',
+  DISLIKE: 'DISLIKE',
+  EAT: 'EAT'
+} as const
 
-
-// This file is empty because there are no enums in the schema.
-export {}
+export type RecordStatus = (typeof RecordStatus)[keyof typeof RecordStatus]

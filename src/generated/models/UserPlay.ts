@@ -27,7 +27,6 @@ export type AggregateUserPlay = {
 export type UserPlayMinAggregateOutputType = {
   id: string | null
   userId: string | null
-  status: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -35,7 +34,6 @@ export type UserPlayMinAggregateOutputType = {
 export type UserPlayMaxAggregateOutputType = {
   id: string | null
   userId: string | null
-  status: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -43,7 +41,6 @@ export type UserPlayMaxAggregateOutputType = {
 export type UserPlayCountAggregateOutputType = {
   id: number
   userId: number
-  status: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -53,7 +50,6 @@ export type UserPlayCountAggregateOutputType = {
 export type UserPlayMinAggregateInputType = {
   id?: true
   userId?: true
-  status?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -61,7 +57,6 @@ export type UserPlayMinAggregateInputType = {
 export type UserPlayMaxAggregateInputType = {
   id?: true
   userId?: true
-  status?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -69,7 +64,6 @@ export type UserPlayMaxAggregateInputType = {
 export type UserPlayCountAggregateInputType = {
   id?: true
   userId?: true
-  status?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -149,8 +143,7 @@ export type UserPlayGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 
 export type UserPlayGroupByOutputType = {
   id: string
-  userId: string
-  status: string
+  userId: string | null
   createdAt: Date
   updatedAt: Date
   _count: UserPlayCountAggregateOutputType | null
@@ -178,22 +171,20 @@ export type UserPlayWhereInput = {
   OR?: Prisma.UserPlayWhereInput[]
   NOT?: Prisma.UserPlayWhereInput | Prisma.UserPlayWhereInput[]
   id?: Prisma.StringFilter<"UserPlay"> | string
-  userId?: Prisma.StringFilter<"UserPlay"> | string
-  status?: Prisma.StringFilter<"UserPlay"> | string
+  userId?: Prisma.StringNullableFilter<"UserPlay"> | string | null
   createdAt?: Prisma.DateTimeFilter<"UserPlay"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"UserPlay"> | Date | string
   records?: Prisma.RecordListRelationFilter
-  users?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }
 
 export type UserPlayOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
-  status?: Prisma.SortOrder
+  userId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   records?: Prisma.RecordOrderByRelationAggregateInput
-  users?: Prisma.UserOrderByWithRelationInput
+  user?: Prisma.UserOrderByWithRelationInput
 }
 
 export type UserPlayWhereUniqueInput = Prisma.AtLeast<{
@@ -201,18 +192,16 @@ export type UserPlayWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.UserPlayWhereInput | Prisma.UserPlayWhereInput[]
   OR?: Prisma.UserPlayWhereInput[]
   NOT?: Prisma.UserPlayWhereInput | Prisma.UserPlayWhereInput[]
-  userId?: Prisma.StringFilter<"UserPlay"> | string
-  status?: Prisma.StringFilter<"UserPlay"> | string
+  userId?: Prisma.StringNullableFilter<"UserPlay"> | string | null
   createdAt?: Prisma.DateTimeFilter<"UserPlay"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"UserPlay"> | Date | string
   records?: Prisma.RecordListRelationFilter
-  users?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }, "id">
 
 export type UserPlayOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
-  status?: Prisma.SortOrder
+  userId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserPlayCountOrderByAggregateInput
@@ -225,25 +214,22 @@ export type UserPlayScalarWhereWithAggregatesInput = {
   OR?: Prisma.UserPlayScalarWhereWithAggregatesInput[]
   NOT?: Prisma.UserPlayScalarWhereWithAggregatesInput | Prisma.UserPlayScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"UserPlay"> | string
-  userId?: Prisma.StringWithAggregatesFilter<"UserPlay"> | string
-  status?: Prisma.StringWithAggregatesFilter<"UserPlay"> | string
+  userId?: Prisma.StringNullableWithAggregatesFilter<"UserPlay"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"UserPlay"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"UserPlay"> | Date | string
 }
 
 export type UserPlayCreateInput = {
   id?: string
-  status: string
   createdAt?: Date | string
   updatedAt?: Date | string
   records?: Prisma.RecordCreateNestedManyWithoutUserPlaysInput
-  users: Prisma.UserCreateNestedOneWithoutUserPlaysInput
+  user?: Prisma.UserCreateNestedOneWithoutUserPlaysInput
 }
 
 export type UserPlayUncheckedCreateInput = {
   id?: string
-  userId: string
-  status: string
+  userId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   records?: Prisma.RecordUncheckedCreateNestedManyWithoutUserPlaysInput
@@ -251,17 +237,15 @@ export type UserPlayUncheckedCreateInput = {
 
 export type UserPlayUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   records?: Prisma.RecordUpdateManyWithoutUserPlaysNestedInput
-  users?: Prisma.UserUpdateOneRequiredWithoutUserPlaysNestedInput
+  user?: Prisma.UserUpdateOneWithoutUserPlaysNestedInput
 }
 
 export type UserPlayUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   records?: Prisma.RecordUncheckedUpdateManyWithoutUserPlaysNestedInput
@@ -269,23 +253,20 @@ export type UserPlayUncheckedUpdateInput = {
 
 export type UserPlayCreateManyInput = {
   id?: string
-  userId: string
-  status: string
+  userId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type UserPlayUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type UserPlayUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -303,7 +284,6 @@ export type UserPlayOrderByRelationAggregateInput = {
 export type UserPlayCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -311,7 +291,6 @@ export type UserPlayCountOrderByAggregateInput = {
 export type UserPlayMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -319,7 +298,6 @@ export type UserPlayMaxOrderByAggregateInput = {
 export type UserPlayMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -329,45 +307,45 @@ export type UserPlayScalarRelationFilter = {
   isNot?: Prisma.UserPlayWhereInput
 }
 
-export type UserPlayCreateNestedManyWithoutUsersInput = {
-  create?: Prisma.XOR<Prisma.UserPlayCreateWithoutUsersInput, Prisma.UserPlayUncheckedCreateWithoutUsersInput> | Prisma.UserPlayCreateWithoutUsersInput[] | Prisma.UserPlayUncheckedCreateWithoutUsersInput[]
-  connectOrCreate?: Prisma.UserPlayCreateOrConnectWithoutUsersInput | Prisma.UserPlayCreateOrConnectWithoutUsersInput[]
-  createMany?: Prisma.UserPlayCreateManyUsersInputEnvelope
+export type UserPlayCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.UserPlayCreateWithoutUserInput, Prisma.UserPlayUncheckedCreateWithoutUserInput> | Prisma.UserPlayCreateWithoutUserInput[] | Prisma.UserPlayUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.UserPlayCreateOrConnectWithoutUserInput | Prisma.UserPlayCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.UserPlayCreateManyUserInputEnvelope
   connect?: Prisma.UserPlayWhereUniqueInput | Prisma.UserPlayWhereUniqueInput[]
 }
 
-export type UserPlayUncheckedCreateNestedManyWithoutUsersInput = {
-  create?: Prisma.XOR<Prisma.UserPlayCreateWithoutUsersInput, Prisma.UserPlayUncheckedCreateWithoutUsersInput> | Prisma.UserPlayCreateWithoutUsersInput[] | Prisma.UserPlayUncheckedCreateWithoutUsersInput[]
-  connectOrCreate?: Prisma.UserPlayCreateOrConnectWithoutUsersInput | Prisma.UserPlayCreateOrConnectWithoutUsersInput[]
-  createMany?: Prisma.UserPlayCreateManyUsersInputEnvelope
+export type UserPlayUncheckedCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.UserPlayCreateWithoutUserInput, Prisma.UserPlayUncheckedCreateWithoutUserInput> | Prisma.UserPlayCreateWithoutUserInput[] | Prisma.UserPlayUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.UserPlayCreateOrConnectWithoutUserInput | Prisma.UserPlayCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.UserPlayCreateManyUserInputEnvelope
   connect?: Prisma.UserPlayWhereUniqueInput | Prisma.UserPlayWhereUniqueInput[]
 }
 
-export type UserPlayUpdateManyWithoutUsersNestedInput = {
-  create?: Prisma.XOR<Prisma.UserPlayCreateWithoutUsersInput, Prisma.UserPlayUncheckedCreateWithoutUsersInput> | Prisma.UserPlayCreateWithoutUsersInput[] | Prisma.UserPlayUncheckedCreateWithoutUsersInput[]
-  connectOrCreate?: Prisma.UserPlayCreateOrConnectWithoutUsersInput | Prisma.UserPlayCreateOrConnectWithoutUsersInput[]
-  upsert?: Prisma.UserPlayUpsertWithWhereUniqueWithoutUsersInput | Prisma.UserPlayUpsertWithWhereUniqueWithoutUsersInput[]
-  createMany?: Prisma.UserPlayCreateManyUsersInputEnvelope
+export type UserPlayUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.UserPlayCreateWithoutUserInput, Prisma.UserPlayUncheckedCreateWithoutUserInput> | Prisma.UserPlayCreateWithoutUserInput[] | Prisma.UserPlayUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.UserPlayCreateOrConnectWithoutUserInput | Prisma.UserPlayCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.UserPlayUpsertWithWhereUniqueWithoutUserInput | Prisma.UserPlayUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.UserPlayCreateManyUserInputEnvelope
   set?: Prisma.UserPlayWhereUniqueInput | Prisma.UserPlayWhereUniqueInput[]
   disconnect?: Prisma.UserPlayWhereUniqueInput | Prisma.UserPlayWhereUniqueInput[]
   delete?: Prisma.UserPlayWhereUniqueInput | Prisma.UserPlayWhereUniqueInput[]
   connect?: Prisma.UserPlayWhereUniqueInput | Prisma.UserPlayWhereUniqueInput[]
-  update?: Prisma.UserPlayUpdateWithWhereUniqueWithoutUsersInput | Prisma.UserPlayUpdateWithWhereUniqueWithoutUsersInput[]
-  updateMany?: Prisma.UserPlayUpdateManyWithWhereWithoutUsersInput | Prisma.UserPlayUpdateManyWithWhereWithoutUsersInput[]
+  update?: Prisma.UserPlayUpdateWithWhereUniqueWithoutUserInput | Prisma.UserPlayUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.UserPlayUpdateManyWithWhereWithoutUserInput | Prisma.UserPlayUpdateManyWithWhereWithoutUserInput[]
   deleteMany?: Prisma.UserPlayScalarWhereInput | Prisma.UserPlayScalarWhereInput[]
 }
 
-export type UserPlayUncheckedUpdateManyWithoutUsersNestedInput = {
-  create?: Prisma.XOR<Prisma.UserPlayCreateWithoutUsersInput, Prisma.UserPlayUncheckedCreateWithoutUsersInput> | Prisma.UserPlayCreateWithoutUsersInput[] | Prisma.UserPlayUncheckedCreateWithoutUsersInput[]
-  connectOrCreate?: Prisma.UserPlayCreateOrConnectWithoutUsersInput | Prisma.UserPlayCreateOrConnectWithoutUsersInput[]
-  upsert?: Prisma.UserPlayUpsertWithWhereUniqueWithoutUsersInput | Prisma.UserPlayUpsertWithWhereUniqueWithoutUsersInput[]
-  createMany?: Prisma.UserPlayCreateManyUsersInputEnvelope
+export type UserPlayUncheckedUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.UserPlayCreateWithoutUserInput, Prisma.UserPlayUncheckedCreateWithoutUserInput> | Prisma.UserPlayCreateWithoutUserInput[] | Prisma.UserPlayUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.UserPlayCreateOrConnectWithoutUserInput | Prisma.UserPlayCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.UserPlayUpsertWithWhereUniqueWithoutUserInput | Prisma.UserPlayUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.UserPlayCreateManyUserInputEnvelope
   set?: Prisma.UserPlayWhereUniqueInput | Prisma.UserPlayWhereUniqueInput[]
   disconnect?: Prisma.UserPlayWhereUniqueInput | Prisma.UserPlayWhereUniqueInput[]
   delete?: Prisma.UserPlayWhereUniqueInput | Prisma.UserPlayWhereUniqueInput[]
   connect?: Prisma.UserPlayWhereUniqueInput | Prisma.UserPlayWhereUniqueInput[]
-  update?: Prisma.UserPlayUpdateWithWhereUniqueWithoutUsersInput | Prisma.UserPlayUpdateWithWhereUniqueWithoutUsersInput[]
-  updateMany?: Prisma.UserPlayUpdateManyWithWhereWithoutUsersInput | Prisma.UserPlayUpdateManyWithWhereWithoutUsersInput[]
+  update?: Prisma.UserPlayUpdateWithWhereUniqueWithoutUserInput | Prisma.UserPlayUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.UserPlayUpdateManyWithWhereWithoutUserInput | Prisma.UserPlayUpdateManyWithWhereWithoutUserInput[]
   deleteMany?: Prisma.UserPlayScalarWhereInput | Prisma.UserPlayScalarWhereInput[]
 }
 
@@ -385,46 +363,44 @@ export type UserPlayUpdateOneRequiredWithoutRecordsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserPlayUpdateToOneWithWhereWithoutRecordsInput, Prisma.UserPlayUpdateWithoutRecordsInput>, Prisma.UserPlayUncheckedUpdateWithoutRecordsInput>
 }
 
-export type UserPlayCreateWithoutUsersInput = {
+export type UserPlayCreateWithoutUserInput = {
   id?: string
-  status: string
   createdAt?: Date | string
   updatedAt?: Date | string
   records?: Prisma.RecordCreateNestedManyWithoutUserPlaysInput
 }
 
-export type UserPlayUncheckedCreateWithoutUsersInput = {
+export type UserPlayUncheckedCreateWithoutUserInput = {
   id?: string
-  status: string
   createdAt?: Date | string
   updatedAt?: Date | string
   records?: Prisma.RecordUncheckedCreateNestedManyWithoutUserPlaysInput
 }
 
-export type UserPlayCreateOrConnectWithoutUsersInput = {
+export type UserPlayCreateOrConnectWithoutUserInput = {
   where: Prisma.UserPlayWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserPlayCreateWithoutUsersInput, Prisma.UserPlayUncheckedCreateWithoutUsersInput>
+  create: Prisma.XOR<Prisma.UserPlayCreateWithoutUserInput, Prisma.UserPlayUncheckedCreateWithoutUserInput>
 }
 
-export type UserPlayCreateManyUsersInputEnvelope = {
-  data: Prisma.UserPlayCreateManyUsersInput | Prisma.UserPlayCreateManyUsersInput[]
+export type UserPlayCreateManyUserInputEnvelope = {
+  data: Prisma.UserPlayCreateManyUserInput | Prisma.UserPlayCreateManyUserInput[]
   skipDuplicates?: boolean
 }
 
-export type UserPlayUpsertWithWhereUniqueWithoutUsersInput = {
+export type UserPlayUpsertWithWhereUniqueWithoutUserInput = {
   where: Prisma.UserPlayWhereUniqueInput
-  update: Prisma.XOR<Prisma.UserPlayUpdateWithoutUsersInput, Prisma.UserPlayUncheckedUpdateWithoutUsersInput>
-  create: Prisma.XOR<Prisma.UserPlayCreateWithoutUsersInput, Prisma.UserPlayUncheckedCreateWithoutUsersInput>
+  update: Prisma.XOR<Prisma.UserPlayUpdateWithoutUserInput, Prisma.UserPlayUncheckedUpdateWithoutUserInput>
+  create: Prisma.XOR<Prisma.UserPlayCreateWithoutUserInput, Prisma.UserPlayUncheckedCreateWithoutUserInput>
 }
 
-export type UserPlayUpdateWithWhereUniqueWithoutUsersInput = {
+export type UserPlayUpdateWithWhereUniqueWithoutUserInput = {
   where: Prisma.UserPlayWhereUniqueInput
-  data: Prisma.XOR<Prisma.UserPlayUpdateWithoutUsersInput, Prisma.UserPlayUncheckedUpdateWithoutUsersInput>
+  data: Prisma.XOR<Prisma.UserPlayUpdateWithoutUserInput, Prisma.UserPlayUncheckedUpdateWithoutUserInput>
 }
 
-export type UserPlayUpdateManyWithWhereWithoutUsersInput = {
+export type UserPlayUpdateManyWithWhereWithoutUserInput = {
   where: Prisma.UserPlayScalarWhereInput
-  data: Prisma.XOR<Prisma.UserPlayUpdateManyMutationInput, Prisma.UserPlayUncheckedUpdateManyWithoutUsersInput>
+  data: Prisma.XOR<Prisma.UserPlayUpdateManyMutationInput, Prisma.UserPlayUncheckedUpdateManyWithoutUserInput>
 }
 
 export type UserPlayScalarWhereInput = {
@@ -432,24 +408,21 @@ export type UserPlayScalarWhereInput = {
   OR?: Prisma.UserPlayScalarWhereInput[]
   NOT?: Prisma.UserPlayScalarWhereInput | Prisma.UserPlayScalarWhereInput[]
   id?: Prisma.StringFilter<"UserPlay"> | string
-  userId?: Prisma.StringFilter<"UserPlay"> | string
-  status?: Prisma.StringFilter<"UserPlay"> | string
+  userId?: Prisma.StringNullableFilter<"UserPlay"> | string | null
   createdAt?: Prisma.DateTimeFilter<"UserPlay"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"UserPlay"> | Date | string
 }
 
 export type UserPlayCreateWithoutRecordsInput = {
   id?: string
-  status: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  users: Prisma.UserCreateNestedOneWithoutUserPlaysInput
+  user?: Prisma.UserCreateNestedOneWithoutUserPlaysInput
 }
 
 export type UserPlayUncheckedCreateWithoutRecordsInput = {
   id?: string
-  userId: string
-  status: string
+  userId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -472,46 +445,40 @@ export type UserPlayUpdateToOneWithWhereWithoutRecordsInput = {
 
 export type UserPlayUpdateWithoutRecordsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  users?: Prisma.UserUpdateOneRequiredWithoutUserPlaysNestedInput
+  user?: Prisma.UserUpdateOneWithoutUserPlaysNestedInput
 }
 
 export type UserPlayUncheckedUpdateWithoutRecordsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type UserPlayCreateManyUsersInput = {
+export type UserPlayCreateManyUserInput = {
   id?: string
-  status: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
-export type UserPlayUpdateWithoutUsersInput = {
+export type UserPlayUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   records?: Prisma.RecordUpdateManyWithoutUserPlaysNestedInput
 }
 
-export type UserPlayUncheckedUpdateWithoutUsersInput = {
+export type UserPlayUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   records?: Prisma.RecordUncheckedUpdateManyWithoutUserPlaysNestedInput
 }
 
-export type UserPlayUncheckedUpdateManyWithoutUsersInput = {
+export type UserPlayUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -550,63 +517,58 @@ export type UserPlayCountOutputTypeCountRecordsArgs<ExtArgs extends runtime.Type
 export type UserPlaySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
-  status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   records?: boolean | Prisma.UserPlay$recordsArgs<ExtArgs>
-  users?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserPlay$userArgs<ExtArgs>
   _count?: boolean | Prisma.UserPlayCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["userPlay"]>
 
 export type UserPlaySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
-  status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  users?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserPlay$userArgs<ExtArgs>
 }, ExtArgs["result"]["userPlay"]>
 
 export type UserPlaySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
-  status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  users?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserPlay$userArgs<ExtArgs>
 }, ExtArgs["result"]["userPlay"]>
 
 export type UserPlaySelectScalar = {
   id?: boolean
   userId?: boolean
-  status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserPlayOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["userPlay"]>
+export type UserPlayOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["userPlay"]>
 export type UserPlayInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   records?: boolean | Prisma.UserPlay$recordsArgs<ExtArgs>
-  users?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserPlay$userArgs<ExtArgs>
   _count?: boolean | Prisma.UserPlayCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserPlayIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  users?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserPlay$userArgs<ExtArgs>
 }
 export type UserPlayIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  users?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserPlay$userArgs<ExtArgs>
 }
 
 export type $UserPlayPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "UserPlay"
   objects: {
     records: Prisma.$RecordPayload<ExtArgs>[]
-    users: Prisma.$UserPayload<ExtArgs>
+    user: Prisma.$UserPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    userId: string
-    status: string
+    userId: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["userPlay"]>
@@ -1004,7 +966,7 @@ readonly fields: UserPlayFieldRefs;
 export interface Prisma__UserPlayClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   records<T extends Prisma.UserPlay$recordsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserPlay$recordsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  users<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  user<T extends Prisma.UserPlay$userArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserPlay$userArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1036,7 +998,6 @@ export interface Prisma__UserPlayClient<T, Null = never, ExtArgs extends runtime
 export interface UserPlayFieldRefs {
   readonly id: Prisma.FieldRef<"UserPlay", 'String'>
   readonly userId: Prisma.FieldRef<"UserPlay", 'String'>
-  readonly status: Prisma.FieldRef<"UserPlay", 'String'>
   readonly createdAt: Prisma.FieldRef<"UserPlay", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"UserPlay", 'DateTime'>
 }
@@ -1456,6 +1417,25 @@ export type UserPlay$recordsArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.RecordScalarFieldEnum | Prisma.RecordScalarFieldEnum[]
+}
+
+/**
+ * UserPlay.user
+ */
+export type UserPlay$userArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**
