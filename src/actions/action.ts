@@ -8,13 +8,15 @@ import { revalidateTag, unstable_cache } from "next/cache";
 
 export const getFilterData = unstable_cache(
 	async () => {
-		const tags = await prisma.tag.findMany({
-			select: {
-				id: true,
-				name: true,
-			},
-		});
-
+		try {
+			const tags = await prisma.tag.findMany({
+				select: {
+					id: true,
+					name: true,
+				},
+			});
+		
+	
 		const locations = await prisma.location.findMany({
 			select: {
 				id: true,
@@ -26,11 +28,13 @@ export const getFilterData = unstable_cache(
 			tags,
 			locations,
 		};
+		}catch{}
 	},
 	["filter-data"],
 	{
 		revalidate: 60 * 60,
 	},
+
 );
 
 export const createPlayRecord = async (playData: PlayData) => {
